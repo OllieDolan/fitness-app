@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitRank X</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c0a;--card:#141a16;--accent:#39ff14;--text:#dff5e3;--muted:#5a6e5f}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Barlow'}
+.screen{display:none}.active{display:block}
+.top{display:flex;justify-content:space-between;padding:14px;background:#101510}
+.card{background:var(--card);padding:14px;margin:12px;border-radius:12px}
+.btn{background:var(--accent);border:none;padding:10px;border-radius:8px;font-weight:700;cursor:pointer}
+.progress{height:6px;background:#222;border-radius:6px;overflow:hidden}
+.bar{height:100%;background:var(--accent)}
+.big{font-family:'Bebas Neue';font-size:32px}
+</style>
+</head>
+<body>
+
+<div id="name" class="screen active">
+  <div class="card">
+    <div class="big">FitRank X</div>
+    <input id="n" placeholder="Name"><br><br>
+    <button class="btn" onclick="start()">Start</button>
+  </div>
+</div>
+
+<div id="app" class="screen">
+  <div class="top">
+    <div id="user"></div>
+    <div id="pts"></div>
+  </div>
+
+  <div class="card">
+    <div>🔥 Streak: <span id="streak"></span></div>
+    <div>🏆 Level: <span id="lvl"></span></div>
+    <div class="progress"><div id="bar" class="bar"></div></div>
+  </div>
+
+  <div class="card">
+    🚶 Walk
+    <button class="btn" onclick="walk()">+20</button>
+  </div>
+
+  <div class="card">
+    💪 Workout
+    <button class="btn" onclick="work()">+10</button>
+  </div>
+
+  <div class="card">
+    🎯 Daily Challenge: <span id="challenge"></span>
+    <button class="btn" onclick="completeChallenge()">Complete</button>
+  </div>
+
+  <div class="card">
+    🏅 Badges: <span id="badges"></span>
+  </div>
+
+</div>
+
+<script>
+let s={name:'',pts:0,streak:0,last:null,walk:false,work:false,bonus:false,challengeDone:false,badges:[]}
+
+function save(){localStorage.setItem('fx',JSON.stringify(s))}
+function load(){let d=localStorage.getItem('fx');if(d)s=JSON.parse(d)}
+
+function start(){s.name=document.getElementById('n').value;save();launch()}
+function launch(){document.getElementById('name').classList.remove('active');document.getElementById('app').classList.add('active');update()}
+
+function today(){return new Date().toDateString()}
+
+function newDay(){
+ if(s.last!==today()){
+  if(s.walk&&s.work) s.streak++; else s.streak=0
+  s.walk=false;s.work=false;s.bonus=false;s.challengeDone=false
+  s.last=today();genChallenge()
+ }
+}
+
+function add(p){let m=s.streak>=7?1.25:s.streak>=3?1.1:1;s.pts+=Math.floor(p*m)}
+
+function walk(){newDay();if(!s.walk){s.walk=true;add(20)}save();update()}
+function work(){newDay();if(!s.work){s.work=true;add(10)}if(s.walk&&s.work&&!s.bonus){add(30);s.bonus=true}save();update()}
+
+function level(){if(s.pts<500)return['Rookie',s.pts/500];if(s.pts<1500)return['Athlete',(s.pts-500)/1000];if(s.pts<4000)return['Beast',(s.pts-1500)/2500];return['Savage',1]}
+
+function genChallenge(){
+ const list=["Do both tasks","Earn 50 pts","Keep streak alive","Just show up"]
+ s.challenge=list[Math.floor(Math.random()*list.length)]
+}
+
+function completeChallenge(){
+ if(!s.challengeDone){add(40);s.challengeDone=true;unlockBadge('Challenger')}
+ save();update()
+}
+
+function unlockBadge(b){if(!s.badges.includes(b))s.badges.push(b)}
+
+function update(){
+ const [l,p]=level()
+ document.getElementById('user').innerText=s.name
+ document.getElementById('pts').innerText=s.pts+' pts'
+ document.getElementById('streak').innerText=s.streak
+ document.getElementById('lvl').innerText=l
+ document.getElementById('bar').style.width=(p*100)+'%'
+ document.getElementById('challenge').innerText=s.challenge||'—'
+ document.getElementById('badges').innerText=s.badges.join(', ')||'None'
+}
+
+load(); if(s.name) launch(); else genChallenge()
+</script>
+
+</body>
+</html>
