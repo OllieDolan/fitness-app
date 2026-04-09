@@ -359,6 +359,25 @@ body::before{
 }
 .calc-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:5px;font-weight:600}
 .incomplete-msg{color:var(--muted);font-size:12px;letter-spacing:2px;text-align:center;padding:24px 0}
+
+/* ── AVATAR ── */
+.avatar-card{
+  margin:14px 14px 0;
+  background:var(--card);border:1px solid var(--card-border);
+  border-radius:20px;padding:16px 12px 10px;text-align:center;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.08);
+  position:relative;overflow:hidden;
+}
+.avatar-card::before{
+  content:'';position:absolute;top:0;left:30px;right:30px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(196,77,255,0.5),rgba(255,51,153,0.5),transparent);
+}
+#avatar-canvas{image-rendering:pixelated;image-rendering:crisp-edges;display:block;margin:0 auto}
+.avatar-rank-label{
+  font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:3px;
+  color:var(--muted);margin-top:4px;font-weight:700;
+}
 </style>
 </head>
 <body>
@@ -381,6 +400,11 @@ body::before{
       <div class="top-pts" id="pts">0 PTS</div>
       <button class="nav-btn" onclick="showScreen('profile');loadProfileFields();renderCalc()">PROFILE</button>
     </div>
+  </div>
+
+  <div class="avatar-card">
+    <canvas id="avatar-canvas" width="160" height="120"></canvas>
+    <div class="avatar-rank-label" id="av-rank-lbl">ROOKIE</div>
   </div>
 
   <div class="stat-row">
@@ -605,7 +629,7 @@ function playLevelUp(){[300,450,600,900,1200,1800].forEach((f,i)=>setTimeout(()=
 function showScreen(id){document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));document.getElementById(id).classList.add('active');playClick()}
 
 // ── CORE ──────────────────────────────────────────────────────────────────────
-function startApp(){s.name=document.getElementById('n').value||'Operator';save();showScreen('app');update()}
+function startApp(){s.name=document.getElementById('n').value||'Operator';save();showScreen('app');update();startAvatar()}
 function today(){return new Date().toDateString()}
 function newDay(){
   if(s.last!==today()){
@@ -620,7 +644,7 @@ function doWalk(){
   newDay()
   if(!s.walk){
     const prev=level()[0];s.walk=true;addPts(20)
-    showAnim('run',20,'Walk Logged','purple');playLog()
+    showAnim('run',20,'Walk Logged','purple');playLog();celebrate()
     if(level()[0]!==prev) setTimeout(()=>showLevelUp(level()[0]),1800)
   }
   save();update()
@@ -631,7 +655,7 @@ function doWork(){
     const prev=level()[0];s.work=true;addPts(10)
     let earned=10
     if(s.walk&&!s.bonus){addPts(30);s.bonus=true;earned+=30}
-    showAnim('lift',earned,earned>10?'Combo Bonus!':'Workout Logged','purple');playLog()
+    showAnim('lift',earned,earned>10?'Combo Bonus!':'Workout Logged','purple');playLog();celebrate()
     if(level()[0]!==prev) setTimeout(()=>showLevelUp(level()[0]),1800)
   }
   save();update()
@@ -641,7 +665,7 @@ function doChallenge(){
   if(!s.challengeDone){
     const prev=level()[0]
     addPts(40);s.challengeDone=true;unlockBadge('CHALLENGER')
-    showAnim('win',40,'Mission Complete','green');playLog()
+    showAnim('win',40,'Mission Complete','green');playLog();celebrate()
     if(level()[0]!==prev) setTimeout(()=>showLevelUp(level()[0]),1800)
   }
   save();update()
@@ -839,6 +863,144 @@ function showLevelUp(rank){
   requestAnimationFrame(draw)
 }
 
+// ── AVATAR ────────────────────────────────────────────────────────────────────
+const PPIX=5; // px per grid cell
+
+// 12 cols × 17 rows pixel sprite
+// H=hair  S=skin  E=eye  m=blush  B=headband(rank)  O=outfit(rank)  K=shoe
+const SPR=[
+  [0,0,0,'H','H','H','H','H','H',0,0,0],
+  [0,0,'H','H','H','H','H','H','H','H',0,0],
+  [0,0,'B','B','B','B','B','B','B','B',0,0],
+  [0,0,'S','S','S','S','S','S','S','S',0,0],
+  [0,0,'S','E','S','S','S','S','E','S',0,0],
+  [0,0,'S','S','S','S','S','S','S','S',0,0],
+  [0,0,'S','m','S','S','S','m','S','S',0,0],
+  [0,0,0,'S','S','S','S','S','S',0,0,0],
+  [0,'O','O','O','O','O','O','O','O','O','O',0],
+  ['O','O','O','O','O','O','O','O','O','O','O','O'],
+  ['O','O','O','O','O','O','O','O','O','O','O','O'],
+  [0,'O','O','O','O','O','O','O','O','O','O',0],
+  [0,0,'O','O','O',0,0,'O','O','O',0,0],
+  [0,0,'O','O','O',0,0,'O','O','O',0,0],
+  [0,0,'O','O','O',0,0,'O','O','O',0,0],
+  [0,0,'K','K','K',0,0,'K','K','K',0,0],
+  [0,0,'K','K','K',0,0,'K','K','K',0,0],
+]
+
+// Crown for SAVAGE rank (drawn 2 rows above head)
+const CROWN=[
+  [0,0,'C',0,'C',0,'C',0,'C',0,0,0],
+  [0,0,'C','C','C','C','C','C','C',0,0,0],
+]
+
+const RANK_PAL={
+  ROOKIE:{O:'#c44dff',B:'#8020bb',K2:'#1a1040',C:'#ffdd00',glow:'196,77,255'},
+  ATHLETE:{O:'#00d4ff',B:'#0095bb',K2:'#0a1a2a',C:'#ffdd00',glow:'0,212,255'},
+  BEAST:{O:'#ff3399',B:'#bb1060',K2:'#2a0a18',C:'#ffdd00',glow:'255,51,153'},
+  SAVAGE:{O:'#ffaa00',B:'#bb7000',K2:'#1a1200',C:'#ffe040',glow:'255,170,0'},
+}
+const BASE_PAL={H:'#2d1055',S:'#ffcc99',E:'#1a0830',m:'#e8967a',K:'#1a1040'}
+
+let avBob=0,avBobDir=1,avJump=0,avJumpVel=0,avSparkles=[],avRAF=null
+
+function avColors(rank){const rp=RANK_PAL[rank]||RANK_PAL.ROOKIE;return{...BASE_PAL,...rp}}
+
+function drawSpr(ctx,gx,gy,spr,pal){
+  spr.forEach((row,r)=>row.forEach((cell,c)=>{
+    if(!cell||cell===0) return
+    ctx.fillStyle=pal[cell]||'#fff'
+    ctx.fillRect(gx+c*PPIX,gy+r*PPIX,PPIX,PPIX)
+  }))
+}
+
+function renderAv(){
+  const cv=document.getElementById('avatar-canvas');if(!cv) return
+  const ctx=cv.getContext('2d')
+  ctx.clearRect(0,0,cv.width,cv.height)
+  const rank=level()[0]
+  const pal=avColors(rank)
+  const rp=RANK_PAL[rank]||RANK_PAL.ROOKIE
+  const charW=12*PPIX,charH=17*PPIX
+  const baseX=(cv.width-charW)/2
+  const baseY=cv.height-charH-10
+  const curY=baseY+Math.floor(avBob)-Math.floor(avJump)
+  const jumpR=Math.min(1,avJump/25)
+
+  // Shadow on ground
+  ctx.save()
+  ctx.fillStyle=`rgba(${rp.glow},0.22)`
+  const sw=28*(1-jumpR*0.6)
+  ctx.beginPath();ctx.ellipse(baseX+charW/2,cv.height-6,sw,5,0,0,Math.PI*2);ctx.fill()
+  ctx.restore()
+
+  // Soft glow behind sprite
+  ctx.save()
+  ctx.shadowColor=rp.O;ctx.shadowBlur=28
+  ctx.globalAlpha=0.07;ctx.fillStyle=rp.O
+  ctx.fillRect(baseX-4,curY-4,charW+8,charH+8)
+  ctx.restore();ctx.globalAlpha=1
+
+  // Crown overlay for SAVAGE
+  if(rank==='SAVAGE') drawSpr(ctx,baseX,curY-2*PPIX,CROWN,pal)
+
+  // Main sprite
+  drawSpr(ctx,baseX,curY,SPR,pal)
+
+  // Sparkles
+  avSparkles.forEach(sp=>{
+    if(sp.life<=0) return
+    ctx.save()
+    ctx.globalAlpha=sp.life
+    ctx.fillStyle=sp.col;ctx.shadowColor=sp.col;ctx.shadowBlur=10
+    const sz=sp.life*5+1
+    // little cross star
+    ctx.fillRect(sp.x-sz/2,sp.y-1,sz,2)
+    ctx.fillRect(sp.x-1,sp.y-sz/2,2,sz)
+    ctx.restore()
+  })
+
+  // Update rank label
+  const lbl=document.getElementById('av-rank-lbl')
+  if(lbl) lbl.innerText=rank
+}
+
+function tickAv(){
+  avBob+=avBobDir*0.045
+  if(avBob>2.2) avBobDir=-1
+  if(avBob<0) avBobDir=1
+
+  if(avJump>0||avJumpVel>0){
+    avJump+=avJumpVel;avJumpVel-=1.1
+    if(avJump<=0){avJump=0;avJumpVel=0}
+  }
+
+  avSparkles.forEach(sp=>{sp.x+=sp.vx;sp.y+=sp.vy;sp.vy+=0.15;sp.life-=0.035})
+  avSparkles=avSparkles.filter(sp=>sp.life>0)
+
+  renderAv()
+  avRAF=requestAnimationFrame(tickAv)
+}
+
+function startAvatar(){
+  if(avRAF) cancelAnimationFrame(avRAF)
+  avRAF=requestAnimationFrame(tickAv)
+}
+
+function celebrate(){
+  avJumpVel=9
+  const cv=document.getElementById('avatar-canvas');if(!cv) return
+  const cols=['#c44dff','#ff3399','#00ff88','#ffaa00','#00d4ff','#ffffff']
+  const cx=cv.width/2,cy=cv.height-30
+  for(let i=0;i<12;i++){
+    avSparkles.push({
+      x:cx+(Math.random()-0.5)*50,y:cy,
+      vx:(Math.random()-0.5)*4,vy:-Math.random()*5-2,
+      life:1,col:cols[Math.floor(Math.random()*cols.length)]
+    })
+  }
+}
+
 // ── TYPEWRITER ────────────────────────────────────────────────────────────────
 function typewriter(el,text,speed=60){el.innerText='';let i=0;const t=setInterval(()=>{el.innerText+=text[i++];if(i>=text.length)clearInterval(t)},speed)}
 
@@ -917,7 +1079,7 @@ function renderCalc(){
 // ── INIT ──────────────────────────────────────────────────────────────────────
 load()
 typewriter(document.getElementById('tagline'),'Performance Tracking System',60)
-if(s.name){displayedPts=s.pts;showScreen('app');update()}else{genChallenge()}
+if(s.name){displayedPts=s.pts;showScreen('app');update();startAvatar()}else{genChallenge()}
 </script>
 </body>
 </html>
