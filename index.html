@@ -9,13 +9,26 @@
 :root{--bg:#000810;--cyan:#00f5ff;--blue:#0080ff;--orange:#ff6600;--card-bg:rgba(0,20,40,0.85)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--cyan);font-family:'Share Tech Mono',monospace;min-height:100vh;overflow-x:hidden;position:relative}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,0.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
-body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px);pointer-events:none;z-index:1}
+
+/* ANIMATED GRID */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,245,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,0.05) 1px,transparent 1px);
+  background-size:40px 40px;
+  animation:grid-scroll 2.5s linear infinite;
+  pointer-events:none;z-index:0;
+  mask-image:radial-gradient(ellipse at center,black 50%,transparent 85%);
+  -webkit-mask-image:radial-gradient(ellipse at center,black 50%,transparent 85%);
+}
+@keyframes grid-scroll{from{background-position:0 0}to{background-position:0 40px}}
+
+/* SCANLINES */
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.12) 2px,rgba(0,0,0,0.12) 4px);pointer-events:none;z-index:1}
 
 .screen{display:none;position:relative;z-index:2}
 .active{display:block}
 
-/* SPLASH */
+/* ── SPLASH ── */
 #splash{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
 #splash.active{display:flex}
 .splash-box{border:1px solid var(--cyan);box-shadow:0 0 30px var(--cyan),inset 0 0 30px rgba(0,245,255,0.05);padding:40px;width:100%;max-width:420px;background:var(--card-bg);text-align:center;position:relative;animation:pulse-border 4s ease-in-out infinite}
@@ -23,12 +36,11 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .splash-box::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
 .splash-box::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
 @keyframes pulse-border{0%,100%{box-shadow:0 0 30px var(--cyan),inset 0 0 30px rgba(0,245,255,0.05)}50%{box-shadow:0 0 55px var(--cyan),inset 0 0 50px rgba(0,245,255,0.08)}}
-
 .logo{font-family:'Orbitron',sans-serif;font-size:48px;font-weight:900;letter-spacing:6px;color:var(--cyan);text-shadow:0 0 20px var(--cyan),0 0 60px var(--cyan),0 0 100px rgba(0,245,255,0.4);margin-bottom:8px;animation:flicker 6s infinite}
-.tagline{color:var(--orange);font-size:11px;letter-spacing:4px;margin-bottom:36px;text-shadow:0 0 10px var(--orange)}
+.tagline{color:var(--orange);font-size:11px;letter-spacing:3px;margin-bottom:36px;text-shadow:0 0 10px var(--orange);min-height:16px}
 @keyframes flicker{0%,100%{opacity:1}92%{opacity:1}93%{opacity:0.8}94%{opacity:1}96%{opacity:0.9}97%{opacity:1}}
 
-/* INPUTS */
+/* ── INPUTS ── */
 .tron-input{width:100%;background:rgba(0,245,255,0.05);border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:15px;padding:11px 14px;letter-spacing:2px;outline:none;box-shadow:0 0 10px rgba(0,245,255,0.2),inset 0 0 10px rgba(0,245,255,0.05);transition:box-shadow 0.3s;margin-bottom:18px}
 .tron-input:focus{box-shadow:0 0 20px rgba(0,245,255,0.5),inset 0 0 10px rgba(0,245,255,0.1)}
 .tron-input::placeholder{color:rgba(0,245,255,0.3);letter-spacing:3px}
@@ -36,16 +48,16 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .tron-select:focus{border-color:var(--cyan);box-shadow:0 0 10px rgba(0,245,255,0.3)}
 .tron-select option{background:#000810}
 
-/* BUTTONS */
+/* ── BUTTONS ── */
 .btn{background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;padding:12px 24px;cursor:pointer;text-shadow:0 0 10px var(--cyan);box-shadow:0 0 15px rgba(0,245,255,0.3);transition:all 0.2s}
 .btn:hover{box-shadow:0 0 30px rgba(0,245,255,0.7),inset 0 0 20px rgba(0,245,255,0.1);background:rgba(0,245,255,0.08)}
 .btn:active{transform:scale(0.97)}
-.btn:disabled{opacity:0.5;cursor:default;pointer-events:none}
+.btn:disabled{opacity:0.4;cursor:default;pointer-events:none}
 .btn-orange{border-color:var(--orange);color:var(--orange);text-shadow:0 0 10px var(--orange);box-shadow:0 0 15px rgba(255,102,0,0.3)}
 .btn-orange:hover{box-shadow:0 0 30px rgba(255,102,0,0.7),inset 0 0 20px rgba(255,102,0,0.1);background:rgba(255,102,0,0.08)}
 .btn-sm{padding:8px 16px;font-size:10px}
 
-/* TOP BAR */
+/* ── TOP BAR ── */
 .top{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid rgba(0,245,255,0.2);background:rgba(0,8,16,0.95);position:sticky;top:0;z-index:10;box-shadow:0 0 20px rgba(0,245,255,0.1)}
 .top-name{font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:3px;color:var(--cyan);text-shadow:0 0 10px var(--cyan)}
 .top-right{display:flex;align-items:center;gap:14px}
@@ -53,50 +65,68 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .nav-btn{background:none;border:1px solid rgba(0,245,255,0.25);color:var(--cyan);font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;padding:6px 12px;cursor:pointer;transition:all 0.2s}
 .nav-btn:hover{border-color:var(--cyan);box-shadow:0 0 10px rgba(0,245,255,0.3)}
 
-/* CARDS */
+/* ── CARDS ── */
 .card{background:var(--card-bg);border:1px solid rgba(0,245,255,0.2);margin:14px;padding:18px;position:relative}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.5}
-.card-label{font-size:10px;letter-spacing:4px;color:rgba(0,245,255,0.5);margin-bottom:10px;text-transform:uppercase}
+.card-label{font-size:10px;letter-spacing:4px;color:rgba(0,245,255,0.5);margin-bottom:10px}
 
-/* STAT ROW */
+/* ── STAT ROW ── */
 .stat-row{display:flex;gap:14px;margin:14px}
 .stat-box{flex:1;background:var(--card-bg);border:1px solid rgba(0,245,255,0.2);padding:14px;text-align:center}
 .stat-num{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--cyan);text-shadow:0 0 20px var(--cyan),0 0 40px rgba(0,245,255,0.4)}
 .stat-lbl{font-size:9px;letter-spacing:3px;color:rgba(0,245,255,0.4);margin-top:4px}
 
-/* PROGRESS */
+/* STREAK FIRE */
+.streak-hot{color:#ff9800!important;text-shadow:0 0 20px #ff9800,0 0 40px #ff9800!important;animation:s-pulse 1.5s ease-in-out infinite}
+.streak-fire{color:#f44336!important;text-shadow:0 0 20px #f44336,0 0 40px #f44336,0 0 80px #ff9800!important;animation:s-pulse 0.75s ease-in-out infinite}
+@keyframes s-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* HEX RANK */
+.hex-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+.hex{width:56px;height:64px;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:900;letter-spacing:1px;transition:all 0.5s}
+.hex-ROOKIE{background:rgba(0,245,255,0.15);color:#00f5ff;box-shadow:0 0 20px rgba(0,245,255,0.4)}
+.hex-ATHLETE{background:rgba(79,195,247,0.15);color:#4fc3f7;box-shadow:0 0 20px rgba(79,195,247,0.4)}
+.hex-BEAST{background:rgba(255,152,0,0.15);color:#ff9800;box-shadow:0 0 20px rgba(255,152,0,0.4)}
+.hex-SAVAGE{background:rgba(244,67,54,0.15);color:#f44336;box-shadow:0 0 20px rgba(244,67,54,0.4)}
+
+/* ── PROGRESS ── */
 .progress-label{display:flex;justify-content:space-between;font-size:10px;letter-spacing:2px;color:rgba(0,245,255,0.4);margin-bottom:6px}
 .progress{height:4px;background:rgba(0,245,255,0.1);position:relative;overflow:hidden}
 .bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));box-shadow:0 0 10px var(--cyan),0 0 20px rgba(0,245,255,0.5);transition:width 0.5s cubic-bezier(0.4,0,0.2,1);position:relative}
 .bar::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:white;box-shadow:0 0 8px var(--cyan),0 0 16px var(--cyan)}
 
-/* ACTION CARDS */
+/* ── ACTION CARDS ── */
 .action-card{background:var(--card-bg);border:1px solid rgba(0,245,255,0.2);margin:14px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;transition:border-color 0.3s,box-shadow 0.3s;position:relative}
 .action-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.3}
+.action-card:hover{border-color:rgba(0,245,255,0.6);box-shadow:0 0 25px rgba(0,245,255,0.14),inset 0 0 30px rgba(0,245,255,0.04)}
 .action-card.done{border-color:rgba(0,245,255,0.5);box-shadow:inset 0 0 20px rgba(0,245,255,0.05)}
 .action-left{display:flex;align-items:center;gap:14px}
 .action-icon{font-size:26px;transition:transform 0.3s}
+.action-card:hover .action-icon{transform:scale(1.2)}
 .action-name{font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:3px;color:var(--cyan);text-shadow:0 0 8px rgba(0,245,255,0.4)}
 .action-sub{font-size:10px;color:rgba(0,245,255,0.4);letter-spacing:2px;margin-top:3px}
 .done-check{color:var(--cyan);font-size:18px;text-shadow:0 0 10px var(--cyan);animation:pop-in 0.3s ease-out}
 @keyframes pop-in{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
-/* BADGES */
+/* ── BADGES ── */
 .badge{display:inline-block;border:1px solid var(--orange);color:var(--orange);font-size:10px;letter-spacing:2px;padding:3px 8px;margin:3px;text-shadow:0 0 8px var(--orange);box-shadow:0 0 8px rgba(255,102,0,0.3)}
 #badges-wrap{margin-top:8px;min-height:28px}
 .challenge-text{font-size:13px;letter-spacing:1px;color:rgba(0,245,255,0.8);margin:8px 0 14px}
 
-/* ====== ANIMATION OVERLAY ====== */
+/* ── ANIM OVERLAY ── */
 #anim-overlay{position:fixed;inset:0;background:rgba(0,8,16,0.93);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center}
 #anim-overlay.show{display:flex}
 .anim-fig{width:130px;height:170px}
-.anim-fig svg{width:100%;height:100%;filter:drop-shadow(0 0 8px var(--cyan)) drop-shadow(0 0 24px rgba(0,245,255,0.5))}
-.anim-fig svg.orange-glow{filter:drop-shadow(0 0 8px var(--orange)) drop-shadow(0 0 24px rgba(255,102,0,0.5))}
+.anim-fig svg{width:100%;height:100%;filter:drop-shadow(0 0 8px #00f5ff) drop-shadow(0 0 24px rgba(0,245,255,0.5))}
+.anim-fig svg.orange{filter:drop-shadow(0 0 8px #ff6600) drop-shadow(0 0 24px rgba(255,102,0,0.5))}
 .anim-pts{font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;color:var(--cyan);text-shadow:0 0 20px var(--cyan),0 0 40px var(--cyan);animation:pts-float 1.5s ease-out forwards;margin-top:16px}
 .anim-lbl{font-size:11px;letter-spacing:4px;color:rgba(0,245,255,0.6);animation:pts-float 1.5s ease-out forwards;animation-delay:0.1s;margin-top:6px}
-@keyframes pts-float{0%{opacity:0;transform:translateY(20px) scale(0.8)}30%{opacity:1;transform:translateY(0) scale(1.1)}70%{opacity:1;transform:translateY(-10px) scale(1)}100%{opacity:0;transform:translateY(-40px) scale(0.9)}}
+@keyframes pts-float{0%{opacity:0;transform:translateY(20px) scale(0.8)}30%{opacity:1;transform:translateY(0) scale(1.1)}70%{opacity:1;transform:translateY(-10px)}100%{opacity:0;transform:translateY(-40px) scale(0.9)}}
 
-/* ====== PROFILE PAGE ====== */
+/* ── LEVEL UP CANVAS ── */
+#levelup-canvas{position:fixed;inset:0;z-index:200;display:none;pointer-events:none}
+
+/* ── PROFILE ── */
 .profile-section{background:var(--card-bg);border:1px solid rgba(0,245,255,0.2);margin:14px;padding:20px;position:relative}
 .profile-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.5}
 .section-title{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:4px;color:rgba(0,245,255,0.5);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(0,245,255,0.1)}
@@ -104,15 +134,19 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .field-group{flex:1;min-width:90px}
 .field-label{font-size:9px;letter-spacing:3px;color:rgba(0,245,255,0.5);margin-bottom:6px;display:block}
 
-/* CALCULATED STATS */
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+/* GAUGES */
+.gauges-row{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-top:4px}
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.gauge{width:120px;height:120px;border-radius:50%;position:relative;mask:radial-gradient(circle,transparent 41px,black 42px);-webkit-mask:radial-gradient(circle,transparent 41px,black 42px);transition:background 0.6s}
+.gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.gauge-val{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;color:var(--cyan);text-shadow:0 0 10px rgba(0,245,255,0.5)}
+.gauge-sub{font-size:8px;letter-spacing:2px;color:rgba(0,245,255,0.4);margin-top:2px}
+.gauge-lbl{font-size:9px;letter-spacing:3px;color:rgba(0,245,255,0.5)}
+
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .calc-stat{background:rgba(0,245,255,0.03);border:1px solid rgba(0,245,255,0.15);padding:14px;text-align:center}
 .calc-val{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;color:var(--cyan);text-shadow:0 0 10px rgba(0,245,255,0.5)}
 .calc-lbl{font-size:9px;letter-spacing:2px;color:rgba(0,245,255,0.4);margin-top:4px}
-.bmi-bar{height:8px;background:rgba(0,245,255,0.1);margin:10px 0 4px;position:relative}
-.bmi-fill{height:100%;transition:width 0.6s}
-.bmi-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:white;box-shadow:0 0 8px var(--cyan),0 0 16px var(--cyan);transition:left 0.6s}
-.bmi-labels{display:flex;justify-content:space-between;font-size:8px;letter-spacing:1px;color:rgba(0,245,255,0.3)}
 .incomplete-msg{color:rgba(0,245,255,0.3);font-size:11px;letter-spacing:2px;text-align:center;padding:20px 0}
 </style>
 </head>
@@ -122,7 +156,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 <div id="splash" class="screen active">
   <div class="splash-box">
     <div class="logo">FITRANK X</div>
-    <div class="tagline">PERFORMANCE TRACKING SYSTEM</div>
+    <div class="tagline" id="tagline"></div>
     <input id="n" class="tron-input" placeholder="ENTER CALLSIGN" autocomplete="off">
     <button class="btn" onclick="startApp()">INITIALIZE</button>
   </div>
@@ -133,7 +167,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   <div class="top">
     <div class="top-name" id="user"></div>
     <div class="top-right">
-      <div class="top-pts" id="pts"></div>
+      <div class="top-pts" id="pts">0 PTS</div>
       <button class="nav-btn" onclick="showScreen('profile');loadProfileFields();renderCalc()">PROFILE</button>
     </div>
   </div>
@@ -144,14 +178,16 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
       <div class="stat-lbl">DAY STREAK</div>
     </div>
     <div class="stat-box">
-      <div class="stat-num" id="lvl">—</div>
-      <div class="stat-lbl">RANK</div>
+      <div class="hex-wrap">
+        <div class="hex hex-ROOKIE" id="hex">ROOKIE</div>
+      </div>
+      <div class="stat-lbl" style="margin-top:6px">RANK</div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-label">RANK PROGRESS</div>
-    <div class="progress-label"><span id="lvl2"></span><span id="pct"></span></div>
+    <div class="progress-label"><span id="lvl2">ROOKIE</span><span id="pct">0%</span></div>
     <div class="progress"><div id="bar" class="bar" style="width:0%"></div></div>
   </div>
 
@@ -189,7 +225,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   </div>
 </div>
 
-<!-- PROFILE PAGE -->
+<!-- PROFILE -->
 <div id="profile" class="screen">
   <div class="top">
     <button class="nav-btn" onclick="showScreen('app');update()">← BACK</button>
@@ -265,17 +301,20 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   </div>
 </div>
 
-<!-- ANIMATION OVERLAY -->
+<!-- STICK FIGURE OVERLAY -->
 <div id="anim-overlay">
   <div class="anim-fig" id="anim-fig"></div>
   <div class="anim-pts" id="anim-pts"></div>
   <div class="anim-lbl" id="anim-lbl"></div>
 </div>
 
+<!-- LEVEL UP CANVAS -->
+<canvas id="levelup-canvas"></canvas>
+
 <script>
-// ── SVG FIGURES ──────────────────────────────────────
-const SVGS = {
-  run:`<svg viewBox="0 0 100 140" fill="none" stroke="#00f5ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+// ── SVG FIGURES ───────────────────────────────────────────────────────────────
+const SVGS={
+  run:`<svg viewBox="0 0 100 140" fill="none" stroke="#00f5ff" stroke-width="3" stroke-linecap="round">
     <circle cx="50" cy="12" r="10"/>
     <line x1="50" y1="22" x2="50" y2="65"/>
     <g><line x1="50" y1="35" x2="28" y2="52"/>
@@ -291,8 +330,7 @@ const SVGS = {
       <animateTransform attributeName="transform" type="rotate" values="30,50,65;-30,50,65;30,50,65" dur="0.44s" repeatCount="indefinite"/>
     </g>
   </svg>`,
-
-  lift:`<svg viewBox="0 0 100 140" fill="none" stroke="#00f5ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  lift:`<svg viewBox="0 0 100 140" fill="none" stroke="#00f5ff" stroke-width="3" stroke-linecap="round">
     <circle cx="50" cy="12" r="10"/>
     <line x1="50" y1="22" x2="50" y2="75"/>
     <line x1="50" y1="75" x2="35" y2="108"/>
@@ -305,8 +343,7 @@ const SVGS = {
       <animateTransform attributeName="transform" type="rotate" values="0,50,38;-60,50,38;0,50,38" dur="0.65s" repeatCount="indefinite"/>
     </g>
   </svg>`,
-
-  win:`<svg viewBox="0 0 100 130" fill="none" stroke="#ff6600" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  win:`<svg viewBox="0 0 100 130" fill="none" stroke="#ff6600" stroke-width="3" stroke-linecap="round">
     <circle cx="50" cy="14" r="10"/>
     <line x1="50" y1="24" x2="50" y2="68"/>
     <line x1="50" y1="68" x2="35" y2="100"/>
@@ -323,8 +360,9 @@ const SVGS = {
   </svg>`
 }
 
-// ── STATE ─────────────────────────────────────────────
+// ── STATE ─────────────────────────────────────────────────────────────────────
 let s={name:'',pts:0,streak:0,last:null,walk:false,work:false,bonus:false,challengeDone:false,badges:[],challenge:'',profile:{age:'',gender:'',ft:'',in:'',weight:'',goal:'',activity:''}}
+let displayedPts=0, audioCtx=null
 
 function save(){localStorage.setItem('fx',JSON.stringify(s))}
 function load(){
@@ -334,17 +372,30 @@ function load(){
   if(!s.challenge) s.challenge=''
 }
 
-// ── NAVIGATION ────────────────────────────────────────
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'))
-  document.getElementById(id).classList.add('active')
+// ── AUDIO ─────────────────────────────────────────────────────────────────────
+function getAudio(){if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx}
+function playBlip(freq=800,dur=0.1,type='square'){
+  try{
+    const ctx=getAudio(),osc=ctx.createOscillator(),gain=ctx.createGain()
+    osc.connect(gain);gain.connect(ctx.destination)
+    osc.type=type
+    osc.frequency.setValueAtTime(freq,ctx.currentTime)
+    osc.frequency.exponentialRampToValueAtTime(freq*1.4,ctx.currentTime+dur*0.4)
+    gain.gain.setValueAtTime(0.12,ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur)
+    osc.start(ctx.currentTime);osc.stop(ctx.currentTime+dur)
+  }catch(e){}
 }
+function playClick(){playBlip(500,0.07)}
+function playLog(){playBlip(800,0.1);setTimeout(()=>playBlip(1100,0.07),90)}
+function playLevelUp(){[280,420,560,840,1120,1680].forEach((f,i)=>setTimeout(()=>playBlip(f,0.2,'sine'),i*110))}
 
-// ── CORE LOGIC ────────────────────────────────────────
-function startApp(){s.name=document.getElementById('n').value.toUpperCase();save();showScreen('app');update()}
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function showScreen(id){document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));document.getElementById(id).classList.add('active');playClick()}
 
+// ── CORE ──────────────────────────────────────────────────────────────────────
+function startApp(){s.name=document.getElementById('n').value.toUpperCase()||'OPERATOR';save();showScreen('app');update()}
 function today(){return new Date().toDateString()}
-
 function newDay(){
   if(s.last!==today()){
     if(s.walk&&s.work) s.streak++; else s.streak=0
@@ -352,104 +403,243 @@ function newDay(){
     s.last=today();genChallenge()
   }
 }
-
 function addPts(p){let m=s.streak>=7?1.25:s.streak>=3?1.1:1;s.pts+=Math.floor(p*m)}
 
 function doWalk(){
   newDay()
-  if(!s.walk){s.walk=true;addPts(20);showAnim('run',20,'WALK LOGGED','var(--cyan)')}
+  if(!s.walk){
+    const prev=level()[0];s.walk=true;addPts(20)
+    showAnim('run',20,'WALK LOGGED','#00f5ff');playLog()
+    if(level()[0]!==prev) setTimeout(()=>showLevelUp(level()[0]),1800)
+  }
   save();update()
 }
-
 function doWork(){
   newDay()
-  let earned=0
-  if(!s.work){s.work=true;addPts(10);earned=10}
-  if(s.walk&&s.work&&!s.bonus){addPts(30);s.bonus=true;earned+=30}
-  if(earned>0) showAnim('lift',earned,'WORKOUT LOGGED','var(--cyan)')
+  if(!s.work){
+    const prev=level()[0];s.work=true;addPts(10)
+    let earned=10
+    if(s.walk&&!s.bonus){addPts(30);s.bonus=true;earned+=30}
+    showAnim('lift',earned,earned>10?'COMBO BONUS!':'WORKOUT LOGGED','#00f5ff');playLog()
+    if(level()[0]!==prev) setTimeout(()=>showLevelUp(level()[0]),1800)
+  }
   save();update()
 }
-
 function doChallenge(){
   newDay()
-  if(!s.challengeDone){addPts(40);s.challengeDone=true;unlockBadge('CHALLENGER');showAnim('win',40,'MISSION COMPLETE','var(--orange)')}
+  if(!s.challengeDone){
+    const prev=level()[0]
+    addPts(40);s.challengeDone=true;unlockBadge('CHALLENGER')
+    showAnim('win',40,'MISSION COMPLETE','#ff6600');playLog()
+    if(level()[0]!==prev) setTimeout(()=>showLevelUp(level()[0]),1800)
+  }
   save();update()
 }
-
 function level(){
   if(s.pts<500) return['ROOKIE',s.pts/500]
   if(s.pts<1500) return['ATHLETE',(s.pts-500)/1000]
   if(s.pts<4000) return['BEAST',(s.pts-1500)/2500]
   return['SAVAGE',1]
 }
-
 function genChallenge(){
   const list=["COMPLETE BOTH TASKS","EARN 50 PTS TODAY","MAINTAIN YOUR STREAK","JUST SHOW UP","GO THE EXTRA MILE","LOG BOTH ACTIVITIES"]
   s.challenge=list[Math.floor(Math.random()*list.length)]
 }
-
 function unlockBadge(b){if(!s.badges.includes(b))s.badges.push(b)}
 
-// ── UPDATE UI ─────────────────────────────────────────
+// ── ODOMETER ─────────────────────────────────────────────────────────────────
+function animatePts(to){
+  const from=displayedPts,dur=600,t0=performance.now()
+  function tick(now){
+    const t=Math.min((now-t0)/dur,1),ease=1-Math.pow(1-t,3)
+    displayedPts=Math.floor(from+(to-from)*ease)
+    document.getElementById('pts').innerText=displayedPts+' PTS'
+    if(t<1) requestAnimationFrame(tick); else displayedPts=to
+  }
+  requestAnimationFrame(tick)
+}
+
+// ── UPDATE UI ─────────────────────────────────────────────────────────────────
 function update(){
   const [l,p]=level()
   document.getElementById('user').innerText='// '+s.name
-  document.getElementById('pts').innerText=s.pts+' PTS'
-  document.getElementById('streak').innerText=s.streak
-  document.getElementById('lvl').innerText=l
+  animatePts(s.pts)
+
+  const sEl=document.getElementById('streak')
+  sEl.innerText=s.streak
+  sEl.className='stat-num'+(s.streak>=7?' streak-fire':s.streak>=3?' streak-hot':'')
+
+  const hex=document.getElementById('hex')
+  hex.innerText=l;hex.className='hex hex-'+l
+
   document.getElementById('lvl2').innerText=l
   document.getElementById('pct').innerText=Math.floor(p*100)+'%'
   document.getElementById('bar').style.width=(p*100)+'%'
   document.getElementById('challenge').innerText=s.challenge||'—'
 
   const bw=document.getElementById('badges-wrap')
-  bw.innerHTML=s.badges.length
-    ?s.badges.map(b=>`<span class="badge">${b}</span>`).join('')
-    :'<span style="color:rgba(0,245,255,0.3);font-size:11px;letter-spacing:2px">NO BADGES YET</span>'
+  bw.innerHTML=s.badges.length?s.badges.map(b=>`<span class="badge">${b}</span>`).join(''):'<span style="color:rgba(0,245,255,0.3);font-size:11px;letter-spacing:2px">NO BADGES YET</span>'
 
-  // Action button states
   const wb=document.getElementById('walk-btn'),wc=document.getElementById('walk-card')
   const ob=document.getElementById('work-btn'),oc=document.getElementById('work-card')
   const cb=document.getElementById('ch-btn')
-
   if(s.walk){wb.innerHTML='<span class="done-check">✓</span>';wb.disabled=true;wc.classList.add('done')}
   else{wb.innerHTML='LOG';wb.disabled=false;wc.classList.remove('done')}
-
   if(s.work){ob.innerHTML='<span class="done-check">✓</span>';ob.disabled=true;oc.classList.add('done')}
   else{ob.innerHTML='LOG';ob.disabled=false;oc.classList.remove('done')}
-
   if(s.challengeDone){cb.innerHTML='COMPLETED ✓';cb.disabled=true}
   else{cb.innerHTML='COMPLETE MISSION';cb.disabled=false}
 }
 
-// ── ANIMATION OVERLAY ─────────────────────────────────
+// ── STICK FIGURE OVERLAY ──────────────────────────────────────────────────────
 function showAnim(type,pts,label,color){
-  const overlay=document.getElementById('anim-overlay')
-  const fig=document.getElementById('anim-fig')
-  const ptsEl=document.getElementById('anim-pts')
-  const lblEl=document.getElementById('anim-lbl')
-
+  const ov=document.getElementById('anim-overlay'),fig=document.getElementById('anim-fig')
+  const pEl=document.getElementById('anim-pts'),lEl=document.getElementById('anim-lbl')
   fig.innerHTML=SVGS[type]
-  if(type==='win') fig.querySelector('svg').classList.add('orange-glow')
-
-  ptsEl.innerText='+'+pts+' PTS'
-  ptsEl.style.color=color
-  ptsEl.style.textShadow=`0 0 20px ${color}, 0 0 40px ${color}`
-  lblEl.innerText=label
-  lblEl.style.color=type==='win'?'rgba(255,102,0,0.7)':'rgba(0,245,255,0.6)'
-
-  // Restart animations
-  ptsEl.style.animation='none';lblEl.style.animation='none'
-  requestAnimationFrame(()=>{
-    ptsEl.style.animation='pts-float 1.5s ease-out forwards'
-    lblEl.style.animation='pts-float 1.5s ease-out forwards 0.1s'
-  })
-
-  overlay.classList.add('show')
-  setTimeout(()=>overlay.classList.remove('show'),1700)
+  if(type==='win') fig.querySelector('svg').classList.add('orange')
+  pEl.innerText='+'+pts+' PTS';pEl.style.color=color;pEl.style.textShadow=`0 0 20px ${color},0 0 40px ${color}`
+  lEl.innerText=label;lEl.style.color=type==='win'?'rgba(255,102,0,0.7)':'rgba(0,245,255,0.6)'
+  pEl.style.animation='none';lEl.style.animation='none'
+  requestAnimationFrame(()=>{pEl.style.animation='pts-float 1.5s ease-out forwards';lEl.style.animation='pts-float 1.5s ease-out forwards 0.1s'})
+  ov.classList.add('show');setTimeout(()=>ov.classList.remove('show'),1700)
 }
 
-// ── PROFILE ───────────────────────────────────────────
+// ── LEVEL UP IMPLOSION ────────────────────────────────────────────────────────
+function showLevelUp(rank){
+  playLevelUp()
+  const canvas=document.getElementById('levelup-canvas'),ctx=canvas.getContext('2d')
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;canvas.style.display='block'
+  const cx=canvas.width/2,cy=canvas.height/2,maxR=Math.hypot(cx,cy)*1.15
+
+  // 120 particles starting at edges, flying toward center
+  const pts=Array.from({length:120},(_,i)=>{
+    const a=Math.random()*Math.PI*2,r=maxR+Math.random()*80
+    return{sx:cx+Math.cos(a)*r,sy:cy+Math.sin(a)*r,ex:cx+(Math.random()-0.5)*50,ey:cy+(Math.random()-0.5)*50,size:Math.random()*2.5+0.5,col:Math.random()>0.3?'#00f5ff':Math.random()>0.5?'#0080ff':'#ffffff',trail:[]}
+  })
+
+  const rankColors={ROOKIE:'#00f5ff',ATHLETE:'#4fc3f7',BEAST:'#ff9800',SAVAGE:'#f44336'}
+  const rc=rankColors[rank]||'#00f5ff'
+  const T=2800,t0=performance.now()
+  const eIn=t=>t*t*t, eOut=t=>1-Math.pow(1-t,3)
+
+  // Phase boundaries (0–1)
+  const PH={implode:0.26,flash:0.32,shock:0.72,hold:0.86,fade:1.0}
+
+  function draw(now){
+    const e=now-t0,pg=e/T
+    if(pg>=1){canvas.style.display='none';return}
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+
+    // BG dim
+    let bgA=pg<PH.implode?0.75*(pg/PH.implode):0.88
+    ctx.fillStyle=`rgba(0,8,16,${bgA})`;ctx.fillRect(0,0,canvas.width,canvas.height)
+
+    if(pg<PH.implode){
+      // ── IMPLODE: particles rush inward ──
+      const t=eIn(pg/PH.implode)
+      // Build-up glow at center
+      const grd=ctx.createRadialGradient(cx,cy,0,cx,cy,160*(1-t)+10)
+      grd.addColorStop(0,`rgba(0,245,255,${t*0.5})`);grd.addColorStop(1,'transparent')
+      ctx.fillStyle=grd;ctx.fillRect(0,0,canvas.width,canvas.height)
+
+      pts.forEach(p=>{
+        const x=p.sx+(p.ex-p.sx)*t,y=p.sy+(p.ey-p.sy)*t
+        p.trail.push({x,y});if(p.trail.length>10) p.trail.shift()
+        p.trail.forEach((pt,i)=>{
+          const a=(i/p.trail.length)*0.45*t
+          ctx.beginPath();ctx.arc(pt.x,pt.y,p.size*0.5,0,Math.PI*2)
+          ctx.fillStyle=`rgba(0,245,255,${a})`;ctx.fill()
+        })
+        ctx.beginPath();ctx.arc(x,y,p.size,0,Math.PI*2)
+        ctx.fillStyle=p.col;ctx.shadowColor='#00f5ff';ctx.shadowBlur=14;ctx.fill();ctx.shadowBlur=0
+      })
+
+    } else if(pg<PH.flash){
+      // ── FLASH ──
+      const t=(pg-PH.implode)/(PH.flash-PH.implode),fa=Math.sin(t*Math.PI)
+      ctx.fillStyle=`rgba(0,245,255,${fa*0.9})`;ctx.fillRect(0,0,canvas.width,canvas.height)
+      ctx.fillStyle=`rgba(255,255,255,${fa*0.5})`;ctx.fillRect(0,0,canvas.width,canvas.height)
+
+    } else if(pg<PH.hold){
+      // ── SHOCKWAVE + TEXT ──
+      const t=(pg-PH.flash)/(PH.hold-PH.flash)
+
+      // Scatter particles outward
+      pts.forEach((p,i)=>{
+        const a=(i/pts.length)*Math.PI*2,d=eOut(t)*maxR*1.3
+        const x=cx+Math.cos(a)*d,y=cy+Math.sin(a)*d,al=Math.max(0,1-t*2)
+        if(al<=0) return
+        ctx.beginPath();ctx.arc(x,y,p.size,0,Math.PI*2)
+        ctx.fillStyle=`rgba(0,245,255,${al})`;ctx.shadowColor='#00f5ff';ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0
+      })
+
+      // 3 shockwave rings expanding outward
+      for(let r=0;r<3;r++){
+        const delay=r*0.13,rt=Math.max(0,(t-delay)/(1-delay));if(rt<=0) continue
+        const rad=eOut(rt)*maxR,al=Math.max(0,(1-rt)*0.95)
+        ctx.beginPath();ctx.arc(cx,cy,rad,0,Math.PI*2)
+        ctx.strokeStyle=r===0?`rgba(0,245,255,${al})`:`rgba(0,128,255,${al*0.5})`
+        ctx.lineWidth=r===0?3.5:r===1?1.5:0.8
+        ctx.shadowColor='#00f5ff';ctx.shadowBlur=r===0?25:10;ctx.stroke();ctx.shadowBlur=0
+      }
+
+      // Center implosion glow fading
+      const ig=Math.max(0,1-t*4)
+      if(ig>0){
+        const gr=ctx.createRadialGradient(cx,cy,0,cx,cy,90*ig)
+        gr.addColorStop(0,`rgba(0,245,255,${ig*0.7})`);gr.addColorStop(1,'transparent')
+        ctx.fillStyle=gr;ctx.fillRect(0,0,canvas.width,canvas.height)
+      }
+
+      // Rank text appearing
+      const tt=Math.max(0,(t-0.18)/0.5)
+      if(tt>0){
+        const sc=0.5+eOut(tt)*0.5
+        ctx.save();ctx.globalAlpha=eOut(tt);ctx.translate(cx,cy)
+        // RANK UP
+        ctx.font=`900 ${Math.floor(74*sc)}px 'Orbitron',sans-serif`
+        ctx.textAlign='center';ctx.textBaseline='middle'
+        ctx.shadowColor='#00f5ff';ctx.shadowBlur=50;ctx.fillStyle='#ffffff'
+        ctx.fillText('RANK UP',0,-52*sc)
+        // Rank name
+        ctx.font=`700 ${Math.floor(54*sc)}px 'Orbitron',sans-serif`
+        ctx.shadowColor=rc;ctx.shadowBlur=35;ctx.fillStyle=rc
+        ctx.fillText(rank,0,18*sc)
+        // Decorative lines
+        const lw=130*sc;ctx.shadowBlur=0
+        ctx.strokeStyle=`rgba(0,245,255,${eOut(tt)*0.5})`;ctx.lineWidth=1
+        ctx.beginPath();ctx.moveTo(-lw,-8);ctx.lineTo(lw,-8);ctx.stroke()
+        ctx.beginPath();ctx.moveTo(-lw,60*sc);ctx.lineTo(lw,60*sc);ctx.stroke()
+        ctx.restore()
+      }
+
+    } else if(pg<PH.fade){
+      // ── HOLD ──
+      ctx.save();ctx.translate(cx,cy)
+      ctx.font=`900 74px 'Orbitron',sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle'
+      ctx.shadowColor='#00f5ff';ctx.shadowBlur=50;ctx.fillStyle='#ffffff';ctx.fillText('RANK UP',0,-52)
+      ctx.font=`700 54px 'Orbitron',sans-serif`;ctx.shadowColor=rc;ctx.shadowBlur=35;ctx.fillStyle=rc;ctx.fillText(rank,0,18)
+      ctx.restore()
+
+    } else {
+      // ── FADE OUT ──
+      const t=(pg-PH.hold)/(PH.fade-PH.hold)
+      ctx.save();ctx.globalAlpha=1-t;ctx.translate(cx,cy)
+      ctx.font=`900 74px 'Orbitron',sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle'
+      ctx.shadowColor='#00f5ff';ctx.shadowBlur=50;ctx.fillStyle='#ffffff';ctx.fillText('RANK UP',0,-52)
+      ctx.font=`700 54px 'Orbitron',sans-serif`;ctx.shadowColor=rc;ctx.shadowBlur=35;ctx.fillStyle=rc;ctx.fillText(rank,0,18)
+      ctx.restore()
+      ctx.fillStyle=`rgba(0,8,16,${t})`;ctx.fillRect(0,0,canvas.width,canvas.height)
+    }
+    requestAnimationFrame(draw)
+  }
+  requestAnimationFrame(draw)
+}
+
+// ── TYPEWRITER ────────────────────────────────────────────────────────────────
+function typewriter(el,text,speed=58){el.innerText='';let i=0;const t=setInterval(()=>{el.innerText+=text[i++];if(i>=text.length)clearInterval(t)},speed)}
+
+// ── PROFILE ───────────────────────────────────────────────────────────────────
 function loadProfileFields(){
   const p=s.profile
   document.getElementById('p-age').value=p.age||''
@@ -460,93 +650,72 @@ function loadProfileFields(){
   document.getElementById('p-goal').value=p.goal||''
   document.getElementById('p-activity').value=p.activity||''
 }
-
 function saveProfile(){
-  s.profile={
-    age:document.getElementById('p-age').value,
-    gender:document.getElementById('p-gender').value,
-    ft:document.getElementById('p-ft').value,
-    in:document.getElementById('p-in').value,
-    weight:document.getElementById('p-weight').value,
-    goal:document.getElementById('p-goal').value,
-    activity:document.getElementById('p-activity').value
-  }
-  save();renderCalc()
+  s.profile={age:document.getElementById('p-age').value,gender:document.getElementById('p-gender').value,ft:document.getElementById('p-ft').value,in:document.getElementById('p-in').value,weight:document.getElementById('p-weight').value,goal:document.getElementById('p-goal').value,activity:document.getElementById('p-activity').value}
+  save();renderCalc();playLog()
 }
 
 function renderCalc(){
-  const p=s.profile
-  const out=document.getElementById('calc-output')
-  if(!p.age||!p.gender||!p.ft||!p.weight||!p.activity){
-    out.innerHTML='<div class="incomplete-msg">COMPLETE PROFILE TO VIEW ANALYSIS</div>'
-    return
-  }
-
-  const weightKg=parseFloat(p.weight)*0.453592
-  const heightCm=(parseFloat(p.ft)*12+parseFloat(p.in||0))*2.54
-  const age=parseInt(p.age)
-
-  // BMI
-  const bmi=weightKg/((heightCm/100)**2)
-  let bmiLabel='',bmiColor='var(--cyan)'
-  if(bmi<18.5){bmiLabel='UNDERWEIGHT';bmiColor='#4fc3f7'}
-  else if(bmi<25){bmiLabel='NORMAL';bmiColor='#00f5ff'}
-  else if(bmi<30){bmiLabel='OVERWEIGHT';bmiColor='#ff9800'}
-  else{bmiLabel='OBESE';bmiColor='#f44336'}
-
-  // BMR (Mifflin-St Jeor)
-  let bmr=p.gender==='male'
-    ?10*weightKg+6.25*heightCm-5*age+5
-    :10*weightKg+6.25*heightCm-5*age-161
-
-  // TDEE
+  const p=s.profile,out=document.getElementById('calc-output')
+  if(!p.age||!p.gender||!p.ft||!p.weight||!p.activity){out.innerHTML='<div class="incomplete-msg">COMPLETE PROFILE TO VIEW ANALYSIS</div>';return}
+  const wKg=parseFloat(p.weight)*0.453592,hCm=(parseFloat(p.ft)*12+parseFloat(p.in||0))*2.54,age=parseInt(p.age)
+  const bmi=wKg/((hCm/100)**2)
+  let bmiLbl='',bc='#00f5ff'
+  if(bmi<18.5){bmiLbl='UNDERWEIGHT';bc='#4fc3f7'}
+  else if(bmi<25){bmiLbl='NORMAL';bc='#00f5ff'}
+  else if(bmi<30){bmiLbl='OVERWEIGHT';bc='#ff9800'}
+  else{bmiLbl='OBESE';bc='#f44336'}
+  let bmr=p.gender==='male'?10*wKg+6.25*hCm-5*age+5:10*wKg+6.25*hCm-5*age-161
   const mult={sedentary:1.2,light:1.375,moderate:1.55,active:1.725,veryActive:1.9}
   const tdee=Math.round(bmr*(mult[p.activity]||1.2))
-
-  // Target calories
   const targets={lose:tdee-500,gain:tdee+300,maintain:tdee,endurance:tdee+200}
   const target=Math.round(targets[p.goal]||tdee)
-
-  // BMI bar (range 15–40)
-  const bmiPct=Math.min(100,Math.max(0,((bmi-15)/25)*100))
+  const bmiDeg=Math.min(1,Math.max(0,(bmi-15)/25))*360
+  const calDeg=Math.min(1,target/Math.max(tdee+600,target+200))*360
 
   out.innerHTML=`
+    <div class="gauges-row">
+      <div class="gauge-wrap">
+        <div class="gauge" id="bmi-g">
+          <div class="gauge-center">
+            <div class="gauge-val" style="color:${bc};text-shadow:0 0 10px ${bc}">${bmi.toFixed(1)}</div>
+            <div class="gauge-sub">${bmiLbl}</div>
+          </div>
+        </div>
+        <div class="gauge-lbl">BMI</div>
+      </div>
+      <div class="gauge-wrap">
+        <div class="gauge" id="cal-g">
+          <div class="gauge-center">
+            <div class="gauge-val" style="color:#ff6600;text-shadow:0 0 10px #ff6600">${target}</div>
+            <div class="gauge-sub">KCAL/DAY</div>
+          </div>
+        </div>
+        <div class="gauge-lbl">TARGET</div>
+      </div>
+    </div>
     <div class="stats-grid">
-      <div class="calc-stat">
-        <div class="calc-val" style="color:${bmiColor};text-shadow:0 0 10px ${bmiColor}">${bmi.toFixed(1)}</div>
-        <div class="calc-lbl">BMI · ${bmiLabel}</div>
+      <div class="calc-stat"><div class="calc-val">${Math.round(bmr)}</div><div class="calc-lbl">BMR (KCAL)</div></div>
+      <div class="calc-stat"><div class="calc-val">${tdee}</div><div class="calc-lbl">TDEE (KCAL)</div></div>
+      <div class="calc-stat" style="grid-column:span 2;border-color:rgba(0,245,255,0.08)">
+        <div style="font-size:10px;letter-spacing:2px;color:rgba(0,245,255,0.35)">
+          ${p.ft}'${p.in||0}" &nbsp;·&nbsp; ${p.weight} LBS &nbsp;·&nbsp; AGE ${age}
+          ${p.goal?'&nbsp;·&nbsp; '+{lose:'WEIGHT LOSS',gain:'MUSCLE GAIN',maintain:'MAINTENANCE',endurance:'ENDURANCE'}[p.goal]:''}
+        </div>
       </div>
-      <div class="calc-stat">
-        <div class="calc-val">${Math.round(bmr)}</div>
-        <div class="calc-lbl">BMR (KCAL/DAY)</div>
-      </div>
-      <div class="calc-stat">
-        <div class="calc-val">${tdee}</div>
-        <div class="calc-lbl">TDEE (KCAL/DAY)</div>
-      </div>
-      <div class="calc-stat" style="border-color:rgba(255,102,0,0.3)">
-        <div class="calc-val" style="color:var(--orange);text-shadow:0 0 10px var(--orange)">${target}</div>
-        <div class="calc-lbl">TARGET INTAKE</div>
-      </div>
-    </div>
-    <div style="margin-top:16px">
-      <div class="calc-lbl" style="margin-bottom:8px">BMI SPECTRUM</div>
-      <div class="bmi-bar">
-        <div class="bmi-fill" style="width:${bmiPct}%;background:linear-gradient(90deg,#4fc3f7,${bmiColor})"></div>
-        <div class="bmi-dot" style="left:${bmiPct}%"></div>
-      </div>
-      <div class="bmi-labels"><span>UNDER</span><span>NORMAL</span><span>OVER</span><span>OBESE</span></div>
-    </div>
-    <div style="margin-top:14px;font-size:10px;letter-spacing:2px;color:rgba(0,245,255,0.35);line-height:2">
-      ${p.ft}'${p.in||0}" &nbsp;·&nbsp; ${p.weight} LBS &nbsp;·&nbsp; AGE ${age}<br>
-      ${p.goal?'OBJECTIVE: '+{lose:'WEIGHT LOSS',gain:'MUSCLE GAIN',maintain:'MAINTENANCE',endurance:'ENDURANCE'}[p.goal]:''}
-    </div>
-  `
+    </div>`
+
+  setTimeout(()=>{
+    const bg=document.getElementById('bmi-g'),cg=document.getElementById('cal-g')
+    if(bg) bg.style.background=`conic-gradient(${bc} 0deg ${bmiDeg}deg,rgba(0,245,255,0.07) ${bmiDeg}deg 360deg)`
+    if(cg) cg.style.background=`conic-gradient(#ff6600 0deg ${calDeg}deg,rgba(255,102,0,0.07) ${calDeg}deg 360deg)`
+  },50)
 }
 
-// ── INIT ──────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────────────────────
 load()
-if(s.name){showScreen('app');update()}else{genChallenge()}
+typewriter(document.getElementById('tagline'),'PERFORMANCE TRACKING SYSTEM',58)
+if(s.name){displayedPts=s.pts;showScreen('app');update()}else{genChallenge()}
 </script>
 </body>
 </html>
