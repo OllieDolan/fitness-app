@@ -4,380 +4,116 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FitRank X</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0d0118;
-  --purple:#c44dff;
-  --pink:#ff3399;
-  --blue:#00d4ff;
-  --green:#00ff88;
-  --amber:#ffaa00;
-  --text:#f0e6ff;
-  --muted:rgba(240,230,255,0.45);
-  --card:rgba(255,255,255,0.05);
-  --card-border:rgba(255,255,255,0.09);
-}
+:root{--bg:#000810;--cyan:#00f5ff;--blue:#0080ff;--orange:#ff6600;--card-bg:rgba(0,20,40,0.85)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:var(--bg);
-  background-image:
-    radial-gradient(ellipse 60% 50% at 15% 15%,rgba(196,77,255,0.18) 0%,transparent 70%),
-    radial-gradient(ellipse 50% 40% at 85% 10%,rgba(0,212,255,0.12) 0%,transparent 65%),
-    radial-gradient(ellipse 55% 45% at 75% 88%,rgba(255,51,153,0.14) 0%,transparent 65%),
-    radial-gradient(ellipse 40% 35% at 5% 90%,rgba(0,255,136,0.07) 0%,transparent 60%);
-  color:var(--text);
-  font-family:'Space Grotesk',sans-serif;
-  min-height:100vh;overflow-x:hidden;
-}
-
-/* Subtle star field */
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:
-    radial-gradient(1.5px 1.5px at 10% 15%,rgba(255,255,255,0.35) 0%,transparent 100%),
-    radial-gradient(1px 1px at 25% 42%,rgba(255,255,255,0.25) 0%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 38% 8%,rgba(200,180,255,0.4) 0%,transparent 100%),
-    radial-gradient(1px 1px at 52% 78%,rgba(255,255,255,0.2) 0%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 63% 22%,rgba(255,255,255,0.3) 0%,transparent 100%),
-    radial-gradient(1px 1px at 74% 55%,rgba(180,200,255,0.35) 0%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 88% 35%,rgba(255,255,255,0.25) 0%,transparent 100%),
-    radial-gradient(1px 1px at 92% 70%,rgba(255,180,255,0.3) 0%,transparent 100%),
-    radial-gradient(1px 1px at 18% 68%,rgba(255,255,255,0.2) 0%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 46% 50%,rgba(200,255,255,0.25) 0%,transparent 100%),
-    radial-gradient(1px 1px at 82% 88%,rgba(255,255,255,0.2) 0%,transparent 100%),
-    radial-gradient(1px 1px at 33% 90%,rgba(255,200,255,0.25) 0%,transparent 100%);
-}
+body{background:var(--bg);color:var(--cyan);font-family:'Share Tech Mono',monospace;min-height:100vh;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,0.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px);pointer-events:none;z-index:1}
 
 .screen{display:none;position:relative;z-index:2}
 .active{display:block}
 
-/* ── SPLASH ── */
+/* SPLASH */
 #splash{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
 #splash.active{display:flex}
+.splash-box{border:1px solid var(--cyan);box-shadow:0 0 30px var(--cyan),inset 0 0 30px rgba(0,245,255,0.05);padding:40px;width:100%;max-width:420px;background:var(--card-bg);text-align:center;position:relative;animation:pulse-border 4s ease-in-out infinite}
+.splash-box::before,.splash-box::after{content:'';position:absolute;width:16px;height:16px;border-color:var(--orange);border-style:solid}
+.splash-box::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.splash-box::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+@keyframes pulse-border{0%,100%{box-shadow:0 0 30px var(--cyan),inset 0 0 30px rgba(0,245,255,0.05)}50%{box-shadow:0 0 55px var(--cyan),inset 0 0 50px rgba(0,245,255,0.08)}}
 
-.splash-box{
-  width:100%;max-width:440px;
-  background:rgba(255,255,255,0.06);
-  backdrop-filter:blur(40px);
-  -webkit-backdrop-filter:blur(40px);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:28px;
-  padding:48px 40px;
-  text-align:center;
-  position:relative;
-  box-shadow:0 30px 80px rgba(0,0,0,0.6),0 0 60px rgba(196,77,255,0.1),inset 0 1px 0 rgba(255,255,255,0.15);
-  animation:nova-float 5s ease-in-out infinite;
-}
-@keyframes nova-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.logo{font-family:'Orbitron',sans-serif;font-size:48px;font-weight:900;letter-spacing:6px;color:var(--cyan);text-shadow:0 0 20px var(--cyan),0 0 60px var(--cyan),0 0 100px rgba(0,245,255,0.4);margin-bottom:8px;animation:flicker 6s infinite}
+.tagline{color:var(--orange);font-size:11px;letter-spacing:4px;margin-bottom:36px;text-shadow:0 0 10px var(--orange)}
+@keyframes flicker{0%,100%{opacity:1}92%{opacity:1}93%{opacity:0.8}94%{opacity:1}96%{opacity:0.9}97%{opacity:1}}
 
-/* Gradient border glow on splash */
-.splash-box::before{
-  content:'';position:absolute;inset:-1px;border-radius:29px;
-  background:linear-gradient(135deg,rgba(196,77,255,0.6),rgba(255,51,153,0.4),rgba(0,212,255,0.3),rgba(196,77,255,0.6));
-  z-index:-1;filter:blur(1px);
-  animation:border-spin 4s linear infinite;
-}
-@keyframes border-spin{from{background-position:0% 50%}to{background-position:200% 50%}}
+/* INPUTS */
+.tron-input{width:100%;background:rgba(0,245,255,0.05);border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:15px;padding:11px 14px;letter-spacing:2px;outline:none;box-shadow:0 0 10px rgba(0,245,255,0.2),inset 0 0 10px rgba(0,245,255,0.05);transition:box-shadow 0.3s;margin-bottom:18px}
+.tron-input:focus{box-shadow:0 0 20px rgba(0,245,255,0.5),inset 0 0 10px rgba(0,245,255,0.1)}
+.tron-input::placeholder{color:rgba(0,245,255,0.3);letter-spacing:3px}
+.tron-select{width:100%;background:rgba(0,245,255,0.05);border:1px solid rgba(0,245,255,0.4);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:14px;padding:10px 12px;outline:none;cursor:pointer;transition:border-color 0.3s,box-shadow 0.3s;appearance:none}
+.tron-select:focus{border-color:var(--cyan);box-shadow:0 0 10px rgba(0,245,255,0.3)}
+.tron-select option{background:#000810}
 
-.logo{
-  font-family:'Orbitron',sans-serif;font-size:46px;font-weight:900;letter-spacing:4px;
-  background:linear-gradient(135deg,#c44dff,#ff3399,#00d4ff,#c44dff);
-  background-size:200% auto;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  margin-bottom:8px;
-  animation:gradient-shift 4s linear infinite, nova-pulse 3s ease-in-out infinite;
-  filter:drop-shadow(0 0 20px rgba(196,77,255,0.6));
-}
-@keyframes gradient-shift{to{background-position:200% center}}
-@keyframes nova-pulse{0%,100%{filter:drop-shadow(0 0 20px rgba(196,77,255,0.6))}50%{filter:drop-shadow(0 0 35px rgba(196,77,255,0.9)) drop-shadow(0 0 60px rgba(255,51,153,0.4))}}
+/* BUTTONS */
+.btn{background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;padding:12px 24px;cursor:pointer;text-shadow:0 0 10px var(--cyan);box-shadow:0 0 15px rgba(0,245,255,0.3);transition:all 0.2s}
+.btn:hover{box-shadow:0 0 30px rgba(0,245,255,0.7),inset 0 0 20px rgba(0,245,255,0.1);background:rgba(0,245,255,0.08)}
+.btn:active{transform:scale(0.97)}
+.btn:disabled{opacity:0.5;cursor:default;pointer-events:none}
+.btn-orange{border-color:var(--orange);color:var(--orange);text-shadow:0 0 10px var(--orange);box-shadow:0 0 15px rgba(255,102,0,0.3)}
+.btn-orange:hover{box-shadow:0 0 30px rgba(255,102,0,0.7),inset 0 0 20px rgba(255,102,0,0.1);background:rgba(255,102,0,0.08)}
+.btn-sm{padding:8px 16px;font-size:10px}
 
-.tagline{
-  color:rgba(240,230,255,0.55);font-size:11px;letter-spacing:4px;
-  margin-bottom:36px;min-height:16px;font-family:'Space Grotesk';
-}
-
-/* ── INPUTS ── */
-.tron-input{
-  width:100%;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:12px;
-  color:var(--text);
-  font-family:'Space Grotesk',sans-serif;font-size:15px;
-  padding:13px 18px;letter-spacing:1px;outline:none;
-  transition:all 0.3s;margin-bottom:16px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);
-}
-.tron-input:focus{border-color:rgba(196,77,255,0.6);box-shadow:0 0 0 3px rgba(196,77,255,0.15),inset 0 1px 0 rgba(255,255,255,0.08)}
-.tron-input::placeholder{color:rgba(240,230,255,0.3)}
-.tron-select{
-  width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
-  border-radius:10px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:14px;
-  padding:11px 14px;outline:none;cursor:pointer;transition:all 0.3s;appearance:none;
-}
-.tron-select:focus{border-color:rgba(196,77,255,0.5);box-shadow:0 0 0 3px rgba(196,77,255,0.12)}
-.tron-select option{background:#1a0630}
-
-/* ── BUTTONS ── */
-.btn{
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-  border:none;border-radius:12px;
-  color:#fff;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;
-  padding:13px 28px;cursor:pointer;
-  box-shadow:0 4px 24px rgba(196,77,255,0.45),0 1px 0 rgba(255,255,255,0.2) inset;
-  transition:all 0.2s;text-shadow:none;position:relative;overflow:hidden;
-}
-.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,0.12),transparent);border-radius:12px}
-.btn:hover{box-shadow:0 6px 35px rgba(196,77,255,0.65),0 0 60px rgba(255,51,153,0.25);transform:translateY(-2px)}
-.btn:active{transform:translateY(0) scale(0.98)}
-.btn:disabled{opacity:0.35;cursor:default;pointer-events:none;transform:none}
-
-.btn-orange{background:linear-gradient(135deg,var(--green),var(--blue));box-shadow:0 4px 24px rgba(0,255,136,0.4)}
-.btn-orange:hover{box-shadow:0 6px 35px rgba(0,255,136,0.6),0 0 60px rgba(0,212,255,0.25)}
-
-.btn-sm{padding:9px 18px;font-size:10px;border-radius:10px}
-
-/* ── TOP BAR ── */
-.top{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:14px 20px;
-  background:rgba(13,1,24,0.75);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border-bottom:1px solid rgba(255,255,255,0.07);
-  position:sticky;top:0;z-index:10;
-  box-shadow:0 4px 30px rgba(0,0,0,0.3);
-}
-.top-name{
-  font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:3px;
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
+/* TOP BAR */
+.top{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid rgba(0,245,255,0.2);background:rgba(0,8,16,0.95);position:sticky;top:0;z-index:10;box-shadow:0 0 20px rgba(0,245,255,0.1)}
+.top-name{font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:3px;color:var(--cyan);text-shadow:0 0 10px var(--cyan)}
 .top-right{display:flex;align-items:center;gap:14px}
-.top-pts{
-  font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;
-  background:linear-gradient(135deg,var(--amber),#ff8800);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 8px rgba(255,170,0,0.5));
-}
-.nav-btn{
-  background:rgba(196,77,255,0.1);border:1px solid rgba(196,77,255,0.25);
-  border-radius:8px;color:var(--purple);
-  font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;
-  padding:7px 14px;cursor:pointer;transition:all 0.2s;
-}
-.nav-btn:hover{background:rgba(196,77,255,0.2);border-color:rgba(196,77,255,0.5);box-shadow:0 0 16px rgba(196,77,255,0.2)}
+.top-pts{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;color:var(--orange);text-shadow:0 0 15px var(--orange);letter-spacing:2px}
+.nav-btn{background:none;border:1px solid rgba(0,245,255,0.25);color:var(--cyan);font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;padding:6px 12px;cursor:pointer;transition:all 0.2s}
+.nav-btn:hover{border-color:var(--cyan);box-shadow:0 0 10px rgba(0,245,255,0.3)}
 
-/* ── CARDS ── */
-.card{
-  background:var(--card);
-  border:1px solid var(--card-border);
-  border-radius:20px;margin:14px;padding:20px;
-  position:relative;
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  box-shadow:0 8px 32px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.08);
-}
-.card::before{
-  content:'';position:absolute;top:0;left:30px;right:30px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(196,77,255,0.5),rgba(255,51,153,0.5),transparent);
-  border-radius:1px;
-}
-.card-label{
-  font-size:10px;letter-spacing:4px;color:var(--muted);
-  margin-bottom:12px;font-weight:600;text-transform:uppercase;
-}
+/* CARDS */
+.card{background:var(--card-bg);border:1px solid rgba(0,245,255,0.2);margin:14px;padding:18px;position:relative}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.5}
+.card-label{font-size:10px;letter-spacing:4px;color:rgba(0,245,255,0.5);margin-bottom:10px;text-transform:uppercase}
 
-/* ── STAT ROW ── */
+/* STAT ROW */
 .stat-row{display:flex;gap:14px;margin:14px}
-.stat-box{
-  flex:1;background:var(--card);border:1px solid var(--card-border);
-  border-radius:20px;padding:16px 14px;text-align:center;
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.08);
-  position:relative;overflow:hidden;
-}
-.stat-box::after{
-  content:'';position:absolute;inset:0;border-radius:20px;
-  background:radial-gradient(ellipse at top,rgba(196,77,255,0.06),transparent 70%);
-  pointer-events:none;
-}
-.stat-num{
-  font-family:'Orbitron',sans-serif;font-size:30px;font-weight:900;
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 12px rgba(196,77,255,0.5));
-}
-.stat-lbl{font-size:9px;letter-spacing:3px;color:var(--muted);margin-top:5px;font-weight:600}
+.stat-box{flex:1;background:var(--card-bg);border:1px solid rgba(0,245,255,0.2);padding:14px;text-align:center}
+.stat-num{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--cyan);text-shadow:0 0 20px var(--cyan),0 0 40px rgba(0,245,255,0.4)}
+.stat-lbl{font-size:9px;letter-spacing:3px;color:rgba(0,245,255,0.4);margin-top:4px}
 
-/* Streak fire */
-.streak-hot .stat-num{background:linear-gradient(135deg,#ffaa00,#ff6600)!important;-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 12px rgba(255,170,0,0.6))!important;animation:s-pulse 1.5s ease-in-out infinite}
-.streak-fire .stat-num{background:linear-gradient(135deg,#ff3300,#ff8800)!important;-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 16px rgba(255,80,0,0.8))!important;animation:s-pulse 0.75s ease-in-out infinite}
-@keyframes s-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+/* PROGRESS */
+.progress-label{display:flex;justify-content:space-between;font-size:10px;letter-spacing:2px;color:rgba(0,245,255,0.4);margin-bottom:6px}
+.progress{height:4px;background:rgba(0,245,255,0.1);position:relative;overflow:hidden}
+.bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));box-shadow:0 0 10px var(--cyan),0 0 20px rgba(0,245,255,0.5);transition:width 0.5s cubic-bezier(0.4,0,0.2,1);position:relative}
+.bar::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:white;box-shadow:0 0 8px var(--cyan),0 0 16px var(--cyan)}
 
-/* HEX RANK */
-.hex-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
-.hex{
-  width:58px;height:66px;
-  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Orbitron',sans-serif;font-size:7.5px;font-weight:900;letter-spacing:0.5px;
-  transition:all 0.5s;color:#fff;
-}
-.hex-ROOKIE{background:linear-gradient(135deg,rgba(196,77,255,0.7),rgba(255,51,153,0.5));box-shadow:0 0 20px rgba(196,77,255,0.5)}
-.hex-ATHLETE{background:linear-gradient(135deg,rgba(0,212,255,0.7),rgba(196,77,255,0.5));box-shadow:0 0 20px rgba(0,212,255,0.5)}
-.hex-BEAST{background:linear-gradient(135deg,rgba(255,51,153,0.7),rgba(255,170,0,0.5));box-shadow:0 0 20px rgba(255,51,153,0.5)}
-.hex-SAVAGE{background:linear-gradient(135deg,rgba(255,170,0,0.7),rgba(255,51,153,0.7),rgba(196,77,255,0.7));box-shadow:0 0 24px rgba(255,170,0,0.6)}
+/* ACTION CARDS */
+.action-card{background:var(--card-bg);border:1px solid rgba(0,245,255,0.2);margin:14px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;transition:border-color 0.3s,box-shadow 0.3s;position:relative}
+.action-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.3}
+.action-card.done{border-color:rgba(0,245,255,0.5);box-shadow:inset 0 0 20px rgba(0,245,255,0.05)}
+.action-left{display:flex;align-items:center;gap:14px}
+.action-icon{font-size:26px;transition:transform 0.3s}
+.action-name{font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:3px;color:var(--cyan);text-shadow:0 0 8px rgba(0,245,255,0.4)}
+.action-sub{font-size:10px;color:rgba(0,245,255,0.4);letter-spacing:2px;margin-top:3px}
+.done-check{color:var(--cyan);font-size:18px;text-shadow:0 0 10px var(--cyan);animation:pop-in 0.3s ease-out}
+@keyframes pop-in{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
-/* ── PROGRESS ── */
-.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:500}
-.progress{height:6px;background:rgba(255,255,255,0.08);border-radius:6px;overflow:visible;position:relative}
-.bar{
-  height:100%;border-radius:6px;
-  background:linear-gradient(90deg,var(--purple),var(--pink),var(--blue));
-  background-size:200% auto;
-  animation:bar-flow 3s linear infinite;
-  box-shadow:0 0 12px rgba(196,77,255,0.6),0 0 24px rgba(255,51,153,0.3);
-  transition:width 0.5s cubic-bezier(0.4,0,0.2,1);position:relative;
-}
-@keyframes bar-flow{from{background-position:0% center}to{background-position:200% center}}
-.bar::after{
-  content:'';position:absolute;right:-3px;top:50%;transform:translateY(-50%);
-  width:12px;height:12px;border-radius:50%;
-  background:white;box-shadow:0 0 8px var(--purple),0 0 20px var(--pink);
-}
+/* BADGES */
+.badge{display:inline-block;border:1px solid var(--orange);color:var(--orange);font-size:10px;letter-spacing:2px;padding:3px 8px;margin:3px;text-shadow:0 0 8px var(--orange);box-shadow:0 0 8px rgba(255,102,0,0.3)}
+#badges-wrap{margin-top:8px;min-height:28px}
+.challenge-text{font-size:13px;letter-spacing:1px;color:rgba(0,245,255,0.8);margin:8px 0 14px}
 
-/* ── ACTION CARDS ── */
-.action-card{
-  background:var(--card);border:1px solid var(--card-border);
-  border-radius:20px;margin:14px;padding:18px 20px;
-  display:flex;align-items:center;justify-content:space-between;
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.08);
-  transition:all 0.25s;position:relative;overflow:hidden;
-}
-.action-card::before{
-  content:'';position:absolute;top:0;left:30px;right:30px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(196,77,255,0.3),rgba(255,51,153,0.3),transparent);
-}
-.action-card:hover{
-  background:rgba(255,255,255,0.08);
-  border-color:rgba(196,77,255,0.3);
-  box-shadow:0 12px 40px rgba(0,0,0,0.3),0 0 30px rgba(196,77,255,0.1),inset 0 1px 0 rgba(255,255,255,0.12);
-  transform:translateY(-2px);
-}
-.action-card.done{border-color:rgba(0,255,136,0.3);box-shadow:0 8px 32px rgba(0,0,0,0.25),0 0 20px rgba(0,255,136,0.08)}
-.action-left{display:flex;align-items:center;gap:16px}
-.action-icon{font-size:28px;transition:transform 0.3s;filter:drop-shadow(0 0 8px rgba(196,77,255,0.4))}
-.action-card:hover .action-icon{transform:scale(1.2) rotate(-5deg)}
-.action-name{font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:2px;color:var(--text);font-weight:700}
-.action-sub{font-size:11px;color:var(--muted);margin-top:3px;font-weight:500}
-.done-check{
-  color:var(--green);font-size:20px;
-  filter:drop-shadow(0 0 8px rgba(0,255,136,0.8));
-  animation:pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes pop-in{0%{transform:scale(0) rotate(-20deg)}100%{transform:scale(1) rotate(0deg)}}
-
-/* ── BADGES ── */
-.badge{
-  display:inline-block;
-  background:linear-gradient(135deg,rgba(196,77,255,0.2),rgba(255,51,153,0.15));
-  border:1px solid rgba(196,77,255,0.4);
-  border-radius:20px;
-  color:var(--purple);font-size:10px;letter-spacing:2px;padding:4px 12px;margin:3px;
-  box-shadow:0 0 12px rgba(196,77,255,0.2);font-weight:600;
-}
-#badges-wrap{margin-top:10px;min-height:30px}
-.challenge-text{font-size:14px;color:var(--text);margin:10px 0 16px;font-weight:500;line-height:1.5}
-
-/* ── ANIM OVERLAY ── */
-#anim-overlay{
-  position:fixed;inset:0;z-index:100;
-  display:none;flex-direction:column;align-items:center;justify-content:center;
-  background:rgba(13,1,24,0.88);backdrop-filter:blur(16px);
-}
+/* ====== ANIMATION OVERLAY ====== */
+#anim-overlay{position:fixed;inset:0;background:rgba(0,8,16,0.93);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center}
 #anim-overlay.show{display:flex}
 .anim-fig{width:130px;height:170px}
-.anim-fig svg{width:100%;height:100%;filter:drop-shadow(0 0 10px #c44dff) drop-shadow(0 0 28px rgba(196,77,255,0.5))}
-.anim-fig svg.green-glow{filter:drop-shadow(0 0 10px #00ff88) drop-shadow(0 0 28px rgba(0,255,136,0.5))}
-.anim-pts{
-  font-family:'Orbitron',sans-serif;font-size:38px;font-weight:900;
-  background:linear-gradient(135deg,#c44dff,#ff3399);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 16px rgba(196,77,255,0.8));
-  animation:pts-float 1.5s ease-out forwards;margin-top:20px;
-}
-.anim-pts.green{background:linear-gradient(135deg,#00ff88,#00d4ff)!important;filter:drop-shadow(0 0 16px rgba(0,255,136,0.8))!important}
-.anim-lbl{font-size:11px;letter-spacing:4px;color:var(--muted);animation:pts-float 1.5s ease-out forwards;animation-delay:0.1s;margin-top:8px;font-weight:600}
-@keyframes pts-float{0%{opacity:0;transform:translateY(20px) scale(0.8)}30%{opacity:1;transform:translateY(0) scale(1.1)}70%{opacity:1;transform:translateY(-10px)}100%{opacity:0;transform:translateY(-40px) scale(0.9)}}
+.anim-fig svg{width:100%;height:100%;filter:drop-shadow(0 0 8px var(--cyan)) drop-shadow(0 0 24px rgba(0,245,255,0.5))}
+.anim-fig svg.orange-glow{filter:drop-shadow(0 0 8px var(--orange)) drop-shadow(0 0 24px rgba(255,102,0,0.5))}
+.anim-pts{font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;color:var(--cyan);text-shadow:0 0 20px var(--cyan),0 0 40px var(--cyan);animation:pts-float 1.5s ease-out forwards;margin-top:16px}
+.anim-lbl{font-size:11px;letter-spacing:4px;color:rgba(0,245,255,0.6);animation:pts-float 1.5s ease-out forwards;animation-delay:0.1s;margin-top:6px}
+@keyframes pts-float{0%{opacity:0;transform:translateY(20px) scale(0.8)}30%{opacity:1;transform:translateY(0) scale(1.1)}70%{opacity:1;transform:translateY(-10px) scale(1)}100%{opacity:0;transform:translateY(-40px) scale(0.9)}}
 
-/* ── LEVEL UP CANVAS ── */
-#levelup-canvas{position:fixed;inset:0;z-index:200;display:none;pointer-events:none}
-
-/* ── PROFILE ── */
-.profile-section{
-  background:var(--card);border:1px solid var(--card-border);
-  border-radius:20px;margin:14px;padding:22px;
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.08);
-  position:relative;
-}
-.profile-section::before{
-  content:'';position:absolute;top:0;left:30px;right:30px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(196,77,255,0.5),rgba(255,51,153,0.5),transparent);
-}
-.section-title{
-  font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:4px;
-  color:var(--muted);margin-bottom:18px;padding-bottom:10px;
-  border-bottom:1px solid rgba(255,255,255,0.06);font-weight:700;
-}
+/* ====== PROFILE PAGE ====== */
+.profile-section{background:var(--card-bg);border:1px solid rgba(0,245,255,0.2);margin:14px;padding:20px;position:relative}
+.profile-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.5}
+.section-title{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:4px;color:rgba(0,245,255,0.5);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(0,245,255,0.1)}
 .field-row{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .field-group{flex:1;min-width:90px}
-.field-label{font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:7px;display:block;font-weight:600}
+.field-label{font-size:9px;letter-spacing:3px;color:rgba(0,245,255,0.5);margin-bottom:6px;display:block}
 
-/* ── GAUGES ── */
-.gauges-row{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-top:8px}
-.gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
-.gauge{
-  width:120px;height:120px;border-radius:50%;position:relative;
-  mask:radial-gradient(circle,transparent 41px,black 42px);
-  -webkit-mask:radial-gradient(circle,transparent 41px,black 42px);
-  transition:background 0.6s;
-}
-.gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.gauge-val{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;color:var(--text)}
-.gauge-sub{font-size:8px;letter-spacing:2px;color:var(--muted);margin-top:2px;font-weight:600}
-.gauge-lbl{font-size:10px;letter-spacing:3px;color:var(--muted);font-weight:600}
-
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-.calc-stat{
-  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
-  border-radius:14px;padding:16px;text-align:center;
-}
-.calc-val{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.calc-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:5px;font-weight:600}
-.incomplete-msg{color:var(--muted);font-size:12px;letter-spacing:2px;text-align:center;padding:24px 0}
-
-/* ── AVATAR ── */
-.avatar-card{
-  margin:14px 14px 0;
-  background:var(--card);border:1px solid var(--card-border);
-  border-radius:20px;padding:16px 12px 10px;text-align:center;
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.08);
-  position:relative;overflow:hidden;
-}
-.avatar-card::before{
-  content:'';position:absolute;top:0;left:30px;right:30px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(196,77,255,0.5),rgba(255,51,153,0.5),transparent);
-}
-#avatar-canvas{image-rendering:pixelated;image-rendering:crisp-edges;display:block;margin:0 auto}
-.avatar-rank-label{
-  font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:3px;
-  color:var(--muted);margin-top:4px;font-weight:700;
-}
+/* CALCULATED STATS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.calc-stat{background:rgba(0,245,255,0.03);border:1px solid rgba(0,245,255,0.15);padding:14px;text-align:center}
+.calc-val{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;color:var(--cyan);text-shadow:0 0 10px rgba(0,245,255,0.5)}
+.calc-lbl{font-size:9px;letter-spacing:2px;color:rgba(0,245,255,0.4);margin-top:4px}
+.bmi-bar{height:8px;background:rgba(0,245,255,0.1);margin:10px 0 4px;position:relative}
+.bmi-fill{height:100%;transition:width 0.6s}
+.bmi-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:white;box-shadow:0 0 8px var(--cyan),0 0 16px var(--cyan);transition:left 0.6s}
+.bmi-labels{display:flex;justify-content:space-between;font-size:8px;letter-spacing:1px;color:rgba(0,245,255,0.3)}
+.incomplete-msg{color:rgba(0,245,255,0.3);font-size:11px;letter-spacing:2px;text-align:center;padding:20px 0}
 </style>
 </head>
 <body>
@@ -386,8 +122,8 @@ body::before{
 <div id="splash" class="screen active">
   <div class="splash-box">
     <div class="logo">FITRANK X</div>
-    <div class="tagline" id="tagline"></div>
-    <input id="n" class="tron-input" placeholder="Enter your name..." autocomplete="off">
+    <div class="tagline">PERFORMANCE TRACKING SYSTEM</div>
+    <input id="n" class="tron-input" placeholder="ENTER CALLSIGN" autocomplete="off">
     <button class="btn" onclick="startApp()">INITIALIZE</button>
   </div>
 </div>
@@ -397,34 +133,25 @@ body::before{
   <div class="top">
     <div class="top-name" id="user"></div>
     <div class="top-right">
-      <div class="top-pts" id="pts">0 PTS</div>
+      <div class="top-pts" id="pts"></div>
       <button class="nav-btn" onclick="showScreen('profile');loadProfileFields();renderCalc()">PROFILE</button>
     </div>
   </div>
 
-  <div class="avatar-card">
-    <canvas id="avatar-canvas" width="160" height="120"></canvas>
-    <div class="avatar-rank-label" id="av-rank-lbl">ROOKIE</div>
-  </div>
-
   <div class="stat-row">
     <div class="stat-box">
-      <div id="streak-wrap">
-        <div class="stat-num" id="streak">0</div>
-      </div>
+      <div class="stat-num" id="streak">0</div>
       <div class="stat-lbl">DAY STREAK</div>
     </div>
     <div class="stat-box">
-      <div class="hex-wrap">
-        <div class="hex hex-ROOKIE" id="hex">ROOKIE</div>
-      </div>
-      <div class="stat-lbl" style="margin-top:6px">RANK</div>
+      <div class="stat-num" id="lvl">—</div>
+      <div class="stat-lbl">RANK</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-label">Rank Progress</div>
-    <div class="progress-label"><span id="lvl2">ROOKIE</span><span id="pct">0%</span></div>
+    <div class="card-label">RANK PROGRESS</div>
+    <div class="progress-label"><span id="lvl2"></span><span id="pct"></span></div>
     <div class="progress"><div id="bar" class="bar" style="width:0%"></div></div>
   </div>
 
@@ -433,7 +160,7 @@ body::before{
       <div class="action-icon">🚶</div>
       <div>
         <div class="action-name">WALK</div>
-        <div class="action-sub">+20 pts · Daily activity</div>
+        <div class="action-sub">+20 PTS</div>
       </div>
     </div>
     <button class="btn btn-sm" id="walk-btn" onclick="doWalk()">LOG</button>
@@ -444,34 +171,34 @@ body::before{
       <div class="action-icon">💪</div>
       <div>
         <div class="action-name">WORKOUT</div>
-        <div class="action-sub">+10 pts · +30 combo bonus</div>
+        <div class="action-sub">+10 PTS</div>
       </div>
     </div>
     <button class="btn btn-sm" id="work-btn" onclick="doWork()">LOG</button>
   </div>
 
   <div class="card">
-    <div class="card-label">Daily Directive</div>
+    <div class="card-label">DAILY DIRECTIVE</div>
     <div class="challenge-text" id="challenge">—</div>
-    <button class="btn btn-orange btn-sm" id="ch-btn" onclick="doChallenge()">Complete Mission</button>
+    <button class="btn btn-orange btn-sm" id="ch-btn" onclick="doChallenge()">COMPLETE MISSION</button>
   </div>
 
   <div class="card" style="margin-bottom:24px">
-    <div class="card-label">Achievements</div>
-    <div id="badges-wrap"><span style="color:rgba(240,230,255,0.25);font-size:12px;letter-spacing:2px">No badges yet</span></div>
+    <div class="card-label">ACHIEVEMENTS</div>
+    <div id="badges-wrap"><span style="color:rgba(0,245,255,0.3);font-size:11px;letter-spacing:2px">NO BADGES YET</span></div>
   </div>
 </div>
 
-<!-- PROFILE -->
+<!-- PROFILE PAGE -->
 <div id="profile" class="screen">
   <div class="top">
-    <button class="nav-btn" onclick="showScreen('app');update()">← Back</button>
+    <button class="nav-btn" onclick="showScreen('app');update()">← BACK</button>
     <div class="top-name">OPERATOR PROFILE</div>
     <button class="btn btn-sm" onclick="saveProfile()">SAVE</button>
   </div>
 
   <div class="profile-section">
-    <div class="section-title">Biometrics</div>
+    <div class="section-title">BIOMETRICS</div>
     <div class="field-row">
       <div class="field-group">
         <label class="field-label">AGE</label>
@@ -480,10 +207,10 @@ body::before{
       <div class="field-group">
         <label class="field-label">GENDER</label>
         <select id="p-gender" class="tron-select">
-          <option value="">Select</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
+          <option value="">SELECT</option>
+          <option value="male">MALE</option>
+          <option value="female">FEMALE</option>
+          <option value="other">OTHER</option>
         </select>
       </div>
     </div>
@@ -504,16 +231,16 @@ body::before{
   </div>
 
   <div class="profile-section">
-    <div class="section-title">Mission Parameters</div>
+    <div class="section-title">MISSION PARAMETERS</div>
     <div class="field-row">
       <div class="field-group" style="min-width:180px">
         <label class="field-label">FITNESS GOAL</label>
         <select id="p-goal" class="tron-select">
-          <option value="">Select objective</option>
-          <option value="lose">Lose Weight</option>
-          <option value="gain">Build Muscle</option>
-          <option value="maintain">Maintain</option>
-          <option value="endurance">Endurance</option>
+          <option value="">SELECT OBJECTIVE</option>
+          <option value="lose">LOSE WEIGHT</option>
+          <option value="gain">BUILD MUSCLE</option>
+          <option value="maintain">MAINTAIN</option>
+          <option value="endurance">ENDURANCE</option>
         </select>
       </div>
     </div>
@@ -521,37 +248,34 @@ body::before{
       <div class="field-group" style="min-width:180px">
         <label class="field-label">ACTIVITY LEVEL</label>
         <select id="p-activity" class="tron-select">
-          <option value="">Select level</option>
-          <option value="sedentary">Sedentary (desk job)</option>
-          <option value="light">Light (1–3 days/wk)</option>
-          <option value="moderate">Moderate (3–5 days/wk)</option>
-          <option value="active">Active (6–7 days/wk)</option>
-          <option value="veryActive">Very Active (athlete)</option>
+          <option value="">SELECT LEVEL</option>
+          <option value="sedentary">SEDENTARY (DESK JOB)</option>
+          <option value="light">LIGHT (1-3 DAYS/WK)</option>
+          <option value="moderate">MODERATE (3-5 DAYS/WK)</option>
+          <option value="active">ACTIVE (6-7 DAYS/WK)</option>
+          <option value="veryActive">VERY ACTIVE (ATHLETE)</option>
         </select>
       </div>
     </div>
   </div>
 
   <div class="profile-section" style="margin-bottom:24px">
-    <div class="section-title">System Analysis</div>
-    <div id="calc-output"><div class="incomplete-msg">Complete your profile to view analysis</div></div>
+    <div class="section-title">SYSTEM ANALYSIS</div>
+    <div id="calc-output"><div class="incomplete-msg">COMPLETE PROFILE TO VIEW ANALYSIS</div></div>
   </div>
 </div>
 
-<!-- STICK FIGURE OVERLAY -->
+<!-- ANIMATION OVERLAY -->
 <div id="anim-overlay">
   <div class="anim-fig" id="anim-fig"></div>
   <div class="anim-pts" id="anim-pts"></div>
   <div class="anim-lbl" id="anim-lbl"></div>
 </div>
 
-<!-- LEVEL UP CANVAS -->
-<canvas id="levelup-canvas"></canvas>
-
 <script>
-// ── SVG FIGURES ───────────────────────────────────────────────────────────────
-const SVGS={
-  run:`<svg viewBox="0 0 100 140" fill="none" stroke="#c44dff" stroke-width="3" stroke-linecap="round">
+// ── SVG FIGURES ──────────────────────────────────────
+const SVGS = {
+  run:`<svg viewBox="0 0 100 140" fill="none" stroke="#00f5ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="50" cy="12" r="10"/>
     <line x1="50" y1="22" x2="50" y2="65"/>
     <g><line x1="50" y1="35" x2="28" y2="52"/>
@@ -567,7 +291,8 @@ const SVGS={
       <animateTransform attributeName="transform" type="rotate" values="30,50,65;-30,50,65;30,50,65" dur="0.44s" repeatCount="indefinite"/>
     </g>
   </svg>`,
-  lift:`<svg viewBox="0 0 100 140" fill="none" stroke="#c44dff" stroke-width="3" stroke-linecap="round">
+
+  lift:`<svg viewBox="0 0 100 140" fill="none" stroke="#00f5ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="50" cy="12" r="10"/>
     <line x1="50" y1="22" x2="50" y2="75"/>
     <line x1="50" y1="75" x2="35" y2="108"/>
@@ -580,7 +305,8 @@ const SVGS={
       <animateTransform attributeName="transform" type="rotate" values="0,50,38;-60,50,38;0,50,38" dur="0.65s" repeatCount="indefinite"/>
     </g>
   </svg>`,
-  win:`<svg viewBox="0 0 100 130" fill="none" stroke="#00ff88" stroke-width="3" stroke-linecap="round">
+
+  win:`<svg viewBox="0 0 100 130" fill="none" stroke="#ff6600" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="50" cy="14" r="10"/>
     <line x1="50" y1="24" x2="50" y2="68"/>
     <line x1="50" y1="68" x2="35" y2="100"/>
@@ -591,46 +317,34 @@ const SVGS={
     <g><line x1="50" y1="40" x2="78" y2="20"/>
       <animateTransform attributeName="transform" type="rotate" values="0,50,40;-10,50,40;0,50,40" dur="0.5s" repeatCount="indefinite"/>
     </g>
-    <text x="6" y="32" font-size="18" fill="#00ff88" stroke="none">★</text>
-    <text x="74" y="32" font-size="18" fill="#00ff88" stroke="none">★</text>
-    <text x="41" y="125" font-size="14" fill="#00d4ff" stroke="none">★</text>
+    <text x="6" y="32" font-size="18" fill="#ff6600" stroke="none">★</text>
+    <text x="74" y="32" font-size="18" fill="#ff6600" stroke="none">★</text>
+    <text x="41" y="125" font-size="14" fill="#ff6600" stroke="none">★</text>
   </svg>`
 }
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
+// ── STATE ─────────────────────────────────────────────
 let s={name:'',pts:0,streak:0,last:null,walk:false,work:false,bonus:false,challengeDone:false,badges:[],challenge:'',profile:{age:'',gender:'',ft:'',in:'',weight:'',goal:'',activity:''}}
-let displayedPts=0,audioCtx=null
 
 function save(){localStorage.setItem('fx',JSON.stringify(s))}
 function load(){
-  let d=localStorage.getItem('fx');if(d) s=JSON.parse(d)
+  let d=localStorage.getItem('fx')
+  if(d) s=JSON.parse(d)
   if(!s.profile) s.profile={age:'',gender:'',ft:'',in:'',weight:'',goal:'',activity:''}
   if(!s.challenge) s.challenge=''
 }
 
-// ── AUDIO ─────────────────────────────────────────────────────────────────────
-function getAudio(){if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx}
-function playBlip(freq=800,dur=0.1,type='sine'){
-  try{
-    const ctx=getAudio(),osc=ctx.createOscillator(),gain=ctx.createGain()
-    osc.connect(gain);gain.connect(ctx.destination);osc.type=type
-    osc.frequency.setValueAtTime(freq,ctx.currentTime)
-    osc.frequency.exponentialRampToValueAtTime(freq*1.5,ctx.currentTime+dur*0.4)
-    gain.gain.setValueAtTime(0.1,ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur)
-    osc.start(ctx.currentTime);osc.stop(ctx.currentTime+dur)
-  }catch(e){}
+// ── NAVIGATION ────────────────────────────────────────
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
 }
-function playClick(){playBlip(600,0.08)}
-function playLog(){playBlip(900,0.1);setTimeout(()=>playBlip(1200,0.08),90)}
-function playLevelUp(){[300,450,600,900,1200,1800].forEach((f,i)=>setTimeout(()=>playBlip(f,0.2,'sine'),i*110))}
 
-// ── NAVIGATION ────────────────────────────────────────────────────────────────
-function showScreen(id){document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));document.getElementById(id).classList.add('active');playClick()}
+// ── CORE LOGIC ────────────────────────────────────────
+function startApp(){s.name=document.getElementById('n').value.toUpperCase();save();showScreen('app');update()}
 
-// ── CORE ──────────────────────────────────────────────────────────────────────
-function startApp(){s.name=document.getElementById('n').value||'Operator';save();showScreen('app');update();startAvatar()}
 function today(){return new Date().toDateString()}
+
 function newDay(){
   if(s.last!==today()){
     if(s.walk&&s.work) s.streak++; else s.streak=0
@@ -638,373 +352,104 @@ function newDay(){
     s.last=today();genChallenge()
   }
 }
+
 function addPts(p){let m=s.streak>=7?1.25:s.streak>=3?1.1:1;s.pts+=Math.floor(p*m)}
 
 function doWalk(){
   newDay()
-  if(!s.walk){
-    const prev=level()[0];s.walk=true;addPts(20)
-    showAnim('run',20,'Walk Logged','purple');playLog();celebrate()
-    if(level()[0]!==prev) setTimeout(()=>showLevelUp(level()[0]),1800)
-  }
+  if(!s.walk){s.walk=true;addPts(20);showAnim('run',20,'WALK LOGGED','var(--cyan)')}
   save();update()
 }
+
 function doWork(){
   newDay()
-  if(!s.work){
-    const prev=level()[0];s.work=true;addPts(10)
-    let earned=10
-    if(s.walk&&!s.bonus){addPts(30);s.bonus=true;earned+=30}
-    showAnim('lift',earned,earned>10?'Combo Bonus!':'Workout Logged','purple');playLog();celebrate()
-    if(level()[0]!==prev) setTimeout(()=>showLevelUp(level()[0]),1800)
-  }
+  let earned=0
+  if(!s.work){s.work=true;addPts(10);earned=10}
+  if(s.walk&&s.work&&!s.bonus){addPts(30);s.bonus=true;earned+=30}
+  if(earned>0) showAnim('lift',earned,'WORKOUT LOGGED','var(--cyan)')
   save();update()
 }
+
 function doChallenge(){
   newDay()
-  if(!s.challengeDone){
-    const prev=level()[0]
-    addPts(40);s.challengeDone=true;unlockBadge('CHALLENGER')
-    showAnim('win',40,'Mission Complete','green');playLog();celebrate()
-    if(level()[0]!==prev) setTimeout(()=>showLevelUp(level()[0]),1800)
-  }
+  if(!s.challengeDone){addPts(40);s.challengeDone=true;unlockBadge('CHALLENGER');showAnim('win',40,'MISSION COMPLETE','var(--orange)')}
   save();update()
 }
+
 function level(){
   if(s.pts<500) return['ROOKIE',s.pts/500]
   if(s.pts<1500) return['ATHLETE',(s.pts-500)/1000]
   if(s.pts<4000) return['BEAST',(s.pts-1500)/2500]
   return['SAVAGE',1]
 }
+
 function genChallenge(){
-  const list=["Complete both tasks today","Earn 50 pts","Keep your streak alive","Just show up","Go the extra mile","Log both activities"]
+  const list=["COMPLETE BOTH TASKS","EARN 50 PTS TODAY","MAINTAIN YOUR STREAK","JUST SHOW UP","GO THE EXTRA MILE","LOG BOTH ACTIVITIES"]
   s.challenge=list[Math.floor(Math.random()*list.length)]
 }
+
 function unlockBadge(b){if(!s.badges.includes(b))s.badges.push(b)}
 
-// ── ODOMETER ─────────────────────────────────────────────────────────────────
-function animatePts(to){
-  const from=displayedPts,dur=600,t0=performance.now()
-  function tick(now){
-    const t=Math.min((now-t0)/dur,1),ease=1-Math.pow(1-t,3)
-    displayedPts=Math.floor(from+(to-from)*ease)
-    document.getElementById('pts').innerText=displayedPts+' PTS'
-    if(t<1) requestAnimationFrame(tick); else displayedPts=to
-  }
-  requestAnimationFrame(tick)
-}
-
-// ── UPDATE UI ─────────────────────────────────────────────────────────────────
+// ── UPDATE UI ─────────────────────────────────────────
 function update(){
   const [l,p]=level()
-  document.getElementById('user').innerText=s.name
-  animatePts(s.pts)
-
-  const sw=document.getElementById('streak-wrap')
-  const sEl=document.getElementById('streak')
-  sEl.innerText=s.streak
-  sw.className=s.streak>=7?'streak-fire':s.streak>=3?'streak-hot':''
-
-  const hex=document.getElementById('hex')
-  hex.innerText=l;hex.className='hex hex-'+l
-
+  document.getElementById('user').innerText='// '+s.name
+  document.getElementById('pts').innerText=s.pts+' PTS'
+  document.getElementById('streak').innerText=s.streak
+  document.getElementById('lvl').innerText=l
   document.getElementById('lvl2').innerText=l
   document.getElementById('pct').innerText=Math.floor(p*100)+'%'
   document.getElementById('bar').style.width=(p*100)+'%'
   document.getElementById('challenge').innerText=s.challenge||'—'
 
   const bw=document.getElementById('badges-wrap')
-  bw.innerHTML=s.badges.length?s.badges.map(b=>`<span class="badge">${b}</span>`).join(''):'<span style="color:rgba(240,230,255,0.25);font-size:12px;letter-spacing:2px">No badges yet</span>'
+  bw.innerHTML=s.badges.length
+    ?s.badges.map(b=>`<span class="badge">${b}</span>`).join('')
+    :'<span style="color:rgba(0,245,255,0.3);font-size:11px;letter-spacing:2px">NO BADGES YET</span>'
 
+  // Action button states
   const wb=document.getElementById('walk-btn'),wc=document.getElementById('walk-card')
   const ob=document.getElementById('work-btn'),oc=document.getElementById('work-card')
   const cb=document.getElementById('ch-btn')
+
   if(s.walk){wb.innerHTML='<span class="done-check">✓</span>';wb.disabled=true;wc.classList.add('done')}
   else{wb.innerHTML='LOG';wb.disabled=false;wc.classList.remove('done')}
+
   if(s.work){ob.innerHTML='<span class="done-check">✓</span>';ob.disabled=true;oc.classList.add('done')}
   else{ob.innerHTML='LOG';ob.disabled=false;oc.classList.remove('done')}
-  if(s.challengeDone){cb.innerHTML='Completed ✓';cb.disabled=true}
-  else{cb.innerHTML='Complete Mission';cb.disabled=false}
+
+  if(s.challengeDone){cb.innerHTML='COMPLETED ✓';cb.disabled=true}
+  else{cb.innerHTML='COMPLETE MISSION';cb.disabled=false}
 }
 
-// ── STICK FIGURE OVERLAY ──────────────────────────────────────────────────────
+// ── ANIMATION OVERLAY ─────────────────────────────────
 function showAnim(type,pts,label,color){
-  const ov=document.getElementById('anim-overlay'),fig=document.getElementById('anim-fig')
-  const pEl=document.getElementById('anim-pts'),lEl=document.getElementById('anim-lbl')
+  const overlay=document.getElementById('anim-overlay')
+  const fig=document.getElementById('anim-fig')
+  const ptsEl=document.getElementById('anim-pts')
+  const lblEl=document.getElementById('anim-lbl')
+
   fig.innerHTML=SVGS[type]
-  if(type==='win') fig.querySelector('svg').classList.add('green-glow')
-  pEl.className='anim-pts'+(color==='green'?' green':'')
-  pEl.innerText='+'+pts+' PTS'
-  lEl.innerText=label
-  pEl.style.animation='none';lEl.style.animation='none'
+  if(type==='win') fig.querySelector('svg').classList.add('orange-glow')
+
+  ptsEl.innerText='+'+pts+' PTS'
+  ptsEl.style.color=color
+  ptsEl.style.textShadow=`0 0 20px ${color}, 0 0 40px ${color}`
+  lblEl.innerText=label
+  lblEl.style.color=type==='win'?'rgba(255,102,0,0.7)':'rgba(0,245,255,0.6)'
+
+  // Restart animations
+  ptsEl.style.animation='none';lblEl.style.animation='none'
   requestAnimationFrame(()=>{
-    pEl.style.animation='pts-float 1.5s ease-out forwards'
-    lEl.style.animation='pts-float 1.5s ease-out forwards 0.1s'
-  })
-  ov.classList.add('show');setTimeout(()=>ov.classList.remove('show'),1700)
-}
-
-// ── LEVEL UP IMPLOSION ────────────────────────────────────────────────────────
-function showLevelUp(rank){
-  playLevelUp()
-  const canvas=document.getElementById('levelup-canvas'),ctx=canvas.getContext('2d')
-  canvas.width=window.innerWidth;canvas.height=window.innerHeight;canvas.style.display='block'
-  const cx=canvas.width/2,cy=canvas.height/2,maxR=Math.hypot(cx,cy)*1.15
-
-  const colors=['#c44dff','#ff3399','#00d4ff','#ffffff','#ff3399','#c44dff','#00ff88']
-  const pts=Array.from({length:130},(_,i)=>{
-    const a=Math.random()*Math.PI*2,r=maxR+Math.random()*80
-    return{sx:cx+Math.cos(a)*r,sy:cy+Math.sin(a)*r,ex:cx+(Math.random()-0.5)*50,ey:cy+(Math.random()-0.5)*50,size:Math.random()*2.5+0.5,col:colors[Math.floor(Math.random()*colors.length)],trail:[]}
+    ptsEl.style.animation='pts-float 1.5s ease-out forwards'
+    lblEl.style.animation='pts-float 1.5s ease-out forwards 0.1s'
   })
 
-  const rankColors={ROOKIE:'#c44dff',ATHLETE:'#00d4ff',BEAST:'#ff3399',SAVAGE:'#ffaa00'}
-  const rc=rankColors[rank]||'#c44dff'
-  const T=2800,t0=performance.now()
-  const eIn=t=>t*t*t,eOut=t=>1-Math.pow(1-t,3)
-  const PH={implode:0.26,flash:0.32,shock:0.72,hold:0.86,fade:1.0}
-
-  function draw(now){
-    const e=now-t0,pg=e/T
-    if(pg>=1){canvas.style.display='none';return}
-    ctx.clearRect(0,0,canvas.width,canvas.height)
-
-    let bgA=pg<PH.implode?0.75*(pg/PH.implode):0.9
-    ctx.fillStyle=`rgba(13,1,24,${bgA})`;ctx.fillRect(0,0,canvas.width,canvas.height)
-
-    if(pg<PH.implode){
-      const t=eIn(pg/PH.implode)
-      const grd=ctx.createRadialGradient(cx,cy,0,cx,cy,180*(1-t)+10)
-      grd.addColorStop(0,`rgba(196,77,255,${t*0.45})`);grd.addColorStop(0.5,`rgba(255,51,153,${t*0.2})`);grd.addColorStop(1,'transparent')
-      ctx.fillStyle=grd;ctx.fillRect(0,0,canvas.width,canvas.height)
-      pts.forEach(p=>{
-        const x=p.sx+(p.ex-p.sx)*t,y=p.sy+(p.ey-p.sy)*t
-        p.trail.push({x,y,c:p.col});if(p.trail.length>10) p.trail.shift()
-        p.trail.forEach((pt,i)=>{
-          const a=(i/p.trail.length)*0.4*t
-          const rgb=pt.c.startsWith('#')?`${parseInt(pt.c.slice(1,3),16)},${parseInt(pt.c.slice(3,5),16)},${parseInt(pt.c.slice(5,7),16)}`:'196,77,255'
-          ctx.beginPath();ctx.arc(pt.x,pt.y,p.size*0.5,0,Math.PI*2)
-          ctx.fillStyle=`rgba(${rgb},${a})`;ctx.fill()
-        })
-        ctx.beginPath();ctx.arc(x,y,p.size,0,Math.PI*2)
-        ctx.fillStyle=p.col;ctx.shadowColor=p.col;ctx.shadowBlur=14;ctx.fill();ctx.shadowBlur=0
-      })
-
-    } else if(pg<PH.flash){
-      const t=(pg-PH.implode)/(PH.flash-PH.implode),fa=Math.sin(t*Math.PI)
-      ctx.fillStyle=`rgba(196,77,255,${fa*0.7})`;ctx.fillRect(0,0,canvas.width,canvas.height)
-      ctx.fillStyle=`rgba(255,255,255,${fa*0.45})`;ctx.fillRect(0,0,canvas.width,canvas.height)
-
-    } else if(pg<PH.hold){
-      const t=(pg-PH.flash)/(PH.hold-PH.flash)
-      pts.forEach((p,i)=>{
-        const a=(i/pts.length)*Math.PI*2,d=eOut(t)*maxR*1.3
-        const x=cx+Math.cos(a)*d,y=cy+Math.sin(a)*d,al=Math.max(0,1-t*2)
-        if(al<=0) return
-        ctx.beginPath();ctx.arc(x,y,p.size,0,Math.PI*2)
-        ctx.fillStyle=p.col.replace(')',`,${al})`).replace('rgb','rgba').replace('#'+p.col.slice(1),`rgba(${parseInt(p.col.slice(1,3),16)},${parseInt(p.col.slice(3,5),16)},${parseInt(p.col.slice(5,7),16)},${al})`)
-        // simpler:
-        ctx.fillStyle=`rgba(196,77,255,${al})`;ctx.fill()
-      })
-      // Shockwave rings - purple, pink, blue
-      const ringColors=['rgba(196,77,255,','rgba(255,51,153,','rgba(0,212,255,']
-      for(let r=0;r<3;r++){
-        const delay=r*0.14,rt=Math.max(0,(t-delay)/(1-delay));if(rt<=0) continue
-        const rad=eOut(rt)*maxR,al=Math.max(0,(1-rt)*0.95)
-        ctx.beginPath();ctx.arc(cx,cy,rad,0,Math.PI*2)
-        ctx.strokeStyle=ringColors[r]+al+')'
-        ctx.lineWidth=r===0?4:r===1?2:1
-        ctx.shadowColor=r===0?'#c44dff':r===1?'#ff3399':'#00d4ff';ctx.shadowBlur=r===0?30:12
-        ctx.stroke();ctx.shadowBlur=0
-      }
-      // Center glow
-      const ig=Math.max(0,1-t*4)
-      if(ig>0){
-        const gr=ctx.createRadialGradient(cx,cy,0,cx,cy,100*ig)
-        gr.addColorStop(0,`rgba(196,77,255,${ig*0.6})`);gr.addColorStop(0.5,`rgba(255,51,153,${ig*0.3})`);gr.addColorStop(1,'transparent')
-        ctx.fillStyle=gr;ctx.fillRect(0,0,canvas.width,canvas.height)
-      }
-      // Text
-      const tt=Math.max(0,(t-0.2)/0.5)
-      if(tt>0){
-        const sc=0.5+eOut(tt)*0.5
-        ctx.save();ctx.globalAlpha=eOut(tt);ctx.translate(cx,cy)
-        ctx.font=`900 ${Math.floor(72*sc)}px 'Orbitron',sans-serif`
-        ctx.textAlign='center';ctx.textBaseline='middle'
-        ctx.shadowColor='#c44dff';ctx.shadowBlur=50;ctx.fillStyle='#ffffff'
-        ctx.fillText('RANK UP',0,-52*sc)
-        ctx.font=`700 ${Math.floor(52*sc)}px 'Orbitron',sans-serif`
-        ctx.shadowColor=rc;ctx.shadowBlur=35;ctx.fillStyle=rc
-        ctx.fillText(rank,0,18*sc)
-        const lw=130*sc;ctx.shadowBlur=0
-        ctx.strokeStyle=`rgba(196,77,255,${eOut(tt)*0.4})`;ctx.lineWidth=1
-        ctx.beginPath();ctx.moveTo(-lw,-8);ctx.lineTo(lw,-8);ctx.stroke()
-        ctx.beginPath();ctx.moveTo(-lw,60*sc);ctx.lineTo(lw,60*sc);ctx.stroke()
-        ctx.restore()
-      }
-
-    } else if(pg<PH.fade){
-      ctx.save();ctx.translate(cx,cy)
-      ctx.font=`900 72px 'Orbitron',sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle'
-      ctx.shadowColor='#c44dff';ctx.shadowBlur=50;ctx.fillStyle='#ffffff';ctx.fillText('RANK UP',0,-52)
-      ctx.font=`700 52px 'Orbitron',sans-serif`;ctx.shadowColor=rc;ctx.shadowBlur=35;ctx.fillStyle=rc;ctx.fillText(rank,0,18)
-      ctx.restore()
-
-    } else {
-      const t=(pg-PH.hold)/(PH.fade-PH.hold)
-      ctx.save();ctx.globalAlpha=1-t;ctx.translate(cx,cy)
-      ctx.font=`900 72px 'Orbitron',sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle'
-      ctx.shadowColor='#c44dff';ctx.shadowBlur=50;ctx.fillStyle='#ffffff';ctx.fillText('RANK UP',0,-52)
-      ctx.font=`700 52px 'Orbitron',sans-serif`;ctx.shadowColor=rc;ctx.shadowBlur=35;ctx.fillStyle=rc;ctx.fillText(rank,0,18)
-      ctx.restore()
-      ctx.fillStyle=`rgba(13,1,24,${t})`;ctx.fillRect(0,0,canvas.width,canvas.height)
-    }
-    requestAnimationFrame(draw)
-  }
-  requestAnimationFrame(draw)
+  overlay.classList.add('show')
+  setTimeout(()=>overlay.classList.remove('show'),1700)
 }
 
-// ── AVATAR ────────────────────────────────────────────────────────────────────
-const PPIX=5; // px per grid cell
-
-// 12 cols × 17 rows pixel sprite
-// H=hair  S=skin  E=eye  m=blush  B=headband(rank)  O=outfit(rank)  K=shoe
-const SPR=[
-  [0,0,0,'H','H','H','H','H','H',0,0,0],
-  [0,0,'H','H','H','H','H','H','H','H',0,0],
-  [0,0,'B','B','B','B','B','B','B','B',0,0],
-  [0,0,'S','S','S','S','S','S','S','S',0,0],
-  [0,0,'S','E','S','S','S','S','E','S',0,0],
-  [0,0,'S','S','S','S','S','S','S','S',0,0],
-  [0,0,'S','m','S','S','S','m','S','S',0,0],
-  [0,0,0,'S','S','S','S','S','S',0,0,0],
-  [0,'O','O','O','O','O','O','O','O','O','O',0],
-  ['O','O','O','O','O','O','O','O','O','O','O','O'],
-  ['O','O','O','O','O','O','O','O','O','O','O','O'],
-  [0,'O','O','O','O','O','O','O','O','O','O',0],
-  [0,0,'O','O','O',0,0,'O','O','O',0,0],
-  [0,0,'O','O','O',0,0,'O','O','O',0,0],
-  [0,0,'O','O','O',0,0,'O','O','O',0,0],
-  [0,0,'K','K','K',0,0,'K','K','K',0,0],
-  [0,0,'K','K','K',0,0,'K','K','K',0,0],
-]
-
-// Crown for SAVAGE rank (drawn 2 rows above head)
-const CROWN=[
-  [0,0,'C',0,'C',0,'C',0,'C',0,0,0],
-  [0,0,'C','C','C','C','C','C','C',0,0,0],
-]
-
-const RANK_PAL={
-  ROOKIE:{O:'#c44dff',B:'#8020bb',K2:'#1a1040',C:'#ffdd00',glow:'196,77,255'},
-  ATHLETE:{O:'#00d4ff',B:'#0095bb',K2:'#0a1a2a',C:'#ffdd00',glow:'0,212,255'},
-  BEAST:{O:'#ff3399',B:'#bb1060',K2:'#2a0a18',C:'#ffdd00',glow:'255,51,153'},
-  SAVAGE:{O:'#ffaa00',B:'#bb7000',K2:'#1a1200',C:'#ffe040',glow:'255,170,0'},
-}
-const BASE_PAL={H:'#2d1055',S:'#ffcc99',E:'#1a0830',m:'#e8967a',K:'#1a1040'}
-
-let avBob=0,avBobDir=1,avJump=0,avJumpVel=0,avSparkles=[],avRAF=null
-
-function avColors(rank){const rp=RANK_PAL[rank]||RANK_PAL.ROOKIE;return{...BASE_PAL,...rp}}
-
-function drawSpr(ctx,gx,gy,spr,pal){
-  spr.forEach((row,r)=>row.forEach((cell,c)=>{
-    if(!cell||cell===0) return
-    ctx.fillStyle=pal[cell]||'#fff'
-    ctx.fillRect(gx+c*PPIX,gy+r*PPIX,PPIX,PPIX)
-  }))
-}
-
-function renderAv(){
-  const cv=document.getElementById('avatar-canvas');if(!cv) return
-  const ctx=cv.getContext('2d')
-  ctx.clearRect(0,0,cv.width,cv.height)
-  const rank=level()[0]
-  const pal=avColors(rank)
-  const rp=RANK_PAL[rank]||RANK_PAL.ROOKIE
-  const charW=12*PPIX,charH=17*PPIX
-  const baseX=(cv.width-charW)/2
-  const baseY=cv.height-charH-10
-  const curY=baseY+Math.floor(avBob)-Math.floor(avJump)
-  const jumpR=Math.min(1,avJump/25)
-
-  // Shadow on ground
-  ctx.save()
-  ctx.fillStyle=`rgba(${rp.glow},0.22)`
-  const sw=28*(1-jumpR*0.6)
-  ctx.beginPath();ctx.ellipse(baseX+charW/2,cv.height-6,sw,5,0,0,Math.PI*2);ctx.fill()
-  ctx.restore()
-
-  // Soft glow behind sprite
-  ctx.save()
-  ctx.shadowColor=rp.O;ctx.shadowBlur=28
-  ctx.globalAlpha=0.07;ctx.fillStyle=rp.O
-  ctx.fillRect(baseX-4,curY-4,charW+8,charH+8)
-  ctx.restore();ctx.globalAlpha=1
-
-  // Crown overlay for SAVAGE
-  if(rank==='SAVAGE') drawSpr(ctx,baseX,curY-2*PPIX,CROWN,pal)
-
-  // Main sprite
-  drawSpr(ctx,baseX,curY,SPR,pal)
-
-  // Sparkles
-  avSparkles.forEach(sp=>{
-    if(sp.life<=0) return
-    ctx.save()
-    ctx.globalAlpha=sp.life
-    ctx.fillStyle=sp.col;ctx.shadowColor=sp.col;ctx.shadowBlur=10
-    const sz=sp.life*5+1
-    // little cross star
-    ctx.fillRect(sp.x-sz/2,sp.y-1,sz,2)
-    ctx.fillRect(sp.x-1,sp.y-sz/2,2,sz)
-    ctx.restore()
-  })
-
-  // Update rank label
-  const lbl=document.getElementById('av-rank-lbl')
-  if(lbl) lbl.innerText=rank
-}
-
-function tickAv(){
-  avBob+=avBobDir*0.045
-  if(avBob>2.2) avBobDir=-1
-  if(avBob<0) avBobDir=1
-
-  if(avJump>0||avJumpVel>0){
-    avJump+=avJumpVel;avJumpVel-=1.1
-    if(avJump<=0){avJump=0;avJumpVel=0}
-  }
-
-  avSparkles.forEach(sp=>{sp.x+=sp.vx;sp.y+=sp.vy;sp.vy+=0.15;sp.life-=0.035})
-  avSparkles=avSparkles.filter(sp=>sp.life>0)
-
-  renderAv()
-  avRAF=requestAnimationFrame(tickAv)
-}
-
-function startAvatar(){
-  if(avRAF) cancelAnimationFrame(avRAF)
-  avRAF=requestAnimationFrame(tickAv)
-}
-
-function celebrate(){
-  avJumpVel=9
-  const cv=document.getElementById('avatar-canvas');if(!cv) return
-  const cols=['#c44dff','#ff3399','#00ff88','#ffaa00','#00d4ff','#ffffff']
-  const cx=cv.width/2,cy=cv.height-30
-  for(let i=0;i<12;i++){
-    avSparkles.push({
-      x:cx+(Math.random()-0.5)*50,y:cy,
-      vx:(Math.random()-0.5)*4,vy:-Math.random()*5-2,
-      life:1,col:cols[Math.floor(Math.random()*cols.length)]
-    })
-  }
-}
-
-// ── TYPEWRITER ────────────────────────────────────────────────────────────────
-function typewriter(el,text,speed=60){el.innerText='';let i=0;const t=setInterval(()=>{el.innerText+=text[i++];if(i>=text.length)clearInterval(t)},speed)}
-
-// ── PROFILE ───────────────────────────────────────────────────────────────────
+// ── PROFILE ───────────────────────────────────────────
 function loadProfileFields(){
   const p=s.profile
   document.getElementById('p-age').value=p.age||''
@@ -1015,71 +460,93 @@ function loadProfileFields(){
   document.getElementById('p-goal').value=p.goal||''
   document.getElementById('p-activity').value=p.activity||''
 }
+
 function saveProfile(){
-  s.profile={age:document.getElementById('p-age').value,gender:document.getElementById('p-gender').value,ft:document.getElementById('p-ft').value,in:document.getElementById('p-in').value,weight:document.getElementById('p-weight').value,goal:document.getElementById('p-goal').value,activity:document.getElementById('p-activity').value}
-  save();renderCalc();playLog()
+  s.profile={
+    age:document.getElementById('p-age').value,
+    gender:document.getElementById('p-gender').value,
+    ft:document.getElementById('p-ft').value,
+    in:document.getElementById('p-in').value,
+    weight:document.getElementById('p-weight').value,
+    goal:document.getElementById('p-goal').value,
+    activity:document.getElementById('p-activity').value
+  }
+  save();renderCalc()
 }
+
 function renderCalc(){
-  const p=s.profile,out=document.getElementById('calc-output')
-  if(!p.age||!p.gender||!p.ft||!p.weight||!p.activity){out.innerHTML='<div class="incomplete-msg">Complete your profile to view analysis</div>';return}
-  const wKg=parseFloat(p.weight)*0.453592,hCm=(parseFloat(p.ft)*12+parseFloat(p.in||0))*2.54,age=parseInt(p.age)
-  const bmi=wKg/((hCm/100)**2)
-  let bmiLbl='',bc='#c44dff'
-  if(bmi<18.5){bmiLbl='Underweight';bc='#00d4ff'}
-  else if(bmi<25){bmiLbl='Normal';bc='#00ff88'}
-  else if(bmi<30){bmiLbl='Overweight';bc='#ffaa00'}
-  else{bmiLbl='Obese';bc='#ff3399'}
-  let bmr=p.gender==='male'?10*wKg+6.25*hCm-5*age+5:10*wKg+6.25*hCm-5*age-161
+  const p=s.profile
+  const out=document.getElementById('calc-output')
+  if(!p.age||!p.gender||!p.ft||!p.weight||!p.activity){
+    out.innerHTML='<div class="incomplete-msg">COMPLETE PROFILE TO VIEW ANALYSIS</div>'
+    return
+  }
+
+  const weightKg=parseFloat(p.weight)*0.453592
+  const heightCm=(parseFloat(p.ft)*12+parseFloat(p.in||0))*2.54
+  const age=parseInt(p.age)
+
+  // BMI
+  const bmi=weightKg/((heightCm/100)**2)
+  let bmiLabel='',bmiColor='var(--cyan)'
+  if(bmi<18.5){bmiLabel='UNDERWEIGHT';bmiColor='#4fc3f7'}
+  else if(bmi<25){bmiLabel='NORMAL';bmiColor='#00f5ff'}
+  else if(bmi<30){bmiLabel='OVERWEIGHT';bmiColor='#ff9800'}
+  else{bmiLabel='OBESE';bmiColor='#f44336'}
+
+  // BMR (Mifflin-St Jeor)
+  let bmr=p.gender==='male'
+    ?10*weightKg+6.25*heightCm-5*age+5
+    :10*weightKg+6.25*heightCm-5*age-161
+
+  // TDEE
   const mult={sedentary:1.2,light:1.375,moderate:1.55,active:1.725,veryActive:1.9}
   const tdee=Math.round(bmr*(mult[p.activity]||1.2))
+
+  // Target calories
   const targets={lose:tdee-500,gain:tdee+300,maintain:tdee,endurance:tdee+200}
   const target=Math.round(targets[p.goal]||tdee)
-  const bmiDeg=Math.min(1,Math.max(0,(bmi-15)/25))*360
-  const calDeg=Math.min(1,target/Math.max(tdee+600,target+200))*360
+
+  // BMI bar (range 15–40)
+  const bmiPct=Math.min(100,Math.max(0,((bmi-15)/25)*100))
 
   out.innerHTML=`
-    <div class="gauges-row">
-      <div class="gauge-wrap">
-        <div class="gauge" id="bmi-g">
-          <div class="gauge-center">
-            <div class="gauge-val" style="color:${bc}">${bmi.toFixed(1)}</div>
-            <div class="gauge-sub">${bmiLbl}</div>
-          </div>
-        </div>
-        <div class="gauge-lbl">BMI</div>
+    <div class="stats-grid">
+      <div class="calc-stat">
+        <div class="calc-val" style="color:${bmiColor};text-shadow:0 0 10px ${bmiColor}">${bmi.toFixed(1)}</div>
+        <div class="calc-lbl">BMI · ${bmiLabel}</div>
       </div>
-      <div class="gauge-wrap">
-        <div class="gauge" id="cal-g">
-          <div class="gauge-center">
-            <div class="gauge-val" style="color:#ffaa00">${target}</div>
-            <div class="gauge-sub">kcal/day</div>
-          </div>
-        </div>
-        <div class="gauge-lbl">Target Calories</div>
+      <div class="calc-stat">
+        <div class="calc-val">${Math.round(bmr)}</div>
+        <div class="calc-lbl">BMR (KCAL/DAY)</div>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-val">${tdee}</div>
+        <div class="calc-lbl">TDEE (KCAL/DAY)</div>
+      </div>
+      <div class="calc-stat" style="border-color:rgba(255,102,0,0.3)">
+        <div class="calc-val" style="color:var(--orange);text-shadow:0 0 10px var(--orange)">${target}</div>
+        <div class="calc-lbl">TARGET INTAKE</div>
       </div>
     </div>
-    <div class="stats-grid">
-      <div class="calc-stat"><div class="calc-val">${Math.round(bmr)}</div><div class="calc-lbl">BMR (kcal)</div></div>
-      <div class="calc-stat"><div class="calc-val">${tdee}</div><div class="calc-lbl">TDEE (kcal)</div></div>
-      <div class="calc-stat" style="grid-column:span 2;border-color:rgba(255,255,255,0.05)">
-        <div style="font-size:12px;color:rgba(240,230,255,0.4);letter-spacing:1px;line-height:2">
-          ${p.ft}'${p.in||0}" &nbsp;·&nbsp; ${p.weight} lbs &nbsp;·&nbsp; Age ${age}
-          ${p.goal?'&nbsp;·&nbsp; '+{lose:'Weight Loss',gain:'Muscle Gain',maintain:'Maintenance',endurance:'Endurance'}[p.goal]:''}
-        </div>
+    <div style="margin-top:16px">
+      <div class="calc-lbl" style="margin-bottom:8px">BMI SPECTRUM</div>
+      <div class="bmi-bar">
+        <div class="bmi-fill" style="width:${bmiPct}%;background:linear-gradient(90deg,#4fc3f7,${bmiColor})"></div>
+        <div class="bmi-dot" style="left:${bmiPct}%"></div>
       </div>
-    </div>`
-
-  setTimeout(()=>{
-    const bg=document.getElementById('bmi-g'),cg=document.getElementById('cal-g')
-    if(bg) bg.style.background=`conic-gradient(${bc} 0deg ${bmiDeg}deg,rgba(255,255,255,0.06) ${bmiDeg}deg 360deg)`
-    if(cg) cg.style.background=`conic-gradient(#ffaa00 0deg ${calDeg}deg,rgba(255,255,255,0.06) ${calDeg}deg 360deg)`
-  },50)
+      <div class="bmi-labels"><span>UNDER</span><span>NORMAL</span><span>OVER</span><span>OBESE</span></div>
+    </div>
+    <div style="margin-top:14px;font-size:10px;letter-spacing:2px;color:rgba(0,245,255,0.35);line-height:2">
+      ${p.ft}'${p.in||0}" &nbsp;·&nbsp; ${p.weight} LBS &nbsp;·&nbsp; AGE ${age}<br>
+      ${p.goal?'OBJECTIVE: '+{lose:'WEIGHT LOSS',gain:'MUSCLE GAIN',maintain:'MAINTENANCE',endurance:'ENDURANCE'}[p.goal]:''}
+    </div>
+  `
 }
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────
 load()
-typewriter(document.getElementById('tagline'),'Performance Tracking System',60)
-if(s.name){displayedPts=s.pts;showScreen('app');update();startAvatar()}else{genChallenge()}
+if(s.name){showScreen('app');update()}else{genChallenge()}
 </script>
 </body>
 </html>
