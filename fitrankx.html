@@ -474,6 +474,7 @@ body::before {
 #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 .msg { color:var(--muted); font-size:12px; text-align:center; padding:20px 0; }
 </style>
+<style id="theme-style"></style>
 </head>
 <body>
 
@@ -643,9 +644,13 @@ body::before {
         </div>
       </div>
     </div>
-    <div class="section" style="margin-bottom:24px">
+    <div class="section">
       <div class="sec-title">SYSTEM ANALYSIS</div>
       <div id="calc-out"><div class="msg">Complete profile to view analysis</div></div>
+    </div>
+    <div class="section" style="margin-bottom:24px">
+      <div class="sec-title">INTERFACE THEME</div>
+      <div id="theme-picker" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding:4px 0"></div>
     </div>
   </div>
   <div class="bnav">
@@ -994,7 +999,7 @@ const FAKES = [
   {name:'GRIND_DAILY', pts:750, streak:2, emoji:'💪'},
 ]
 
-let s = {name:'',pts:0,streak:0,last:null,activities:{},bonus:false,challengeDone:false,challenge:'',badges:[],profile:{age:'',gender:'',ft:'',in:'',weight:'',goal:'',activity:''},weightLog:[],weekly:{seed:0,progress:0,claimed:false,ptsThisWeek:0,daysThisWeek:[],activitiesThisWeek:0,challengesThisWeek:0,completedWeeks:[],currentWeek:''},friends:[],myCode:'',plan:{name:'',goal:'',targetDate:'',milestones:[],log:[]},timedScores:[],duels:[],crew:{name:'',members:[],wins:0,losses:0},crewBattles:[]}
+let s = {name:'',pts:0,streak:0,last:null,activities:{},bonus:false,challengeDone:false,challenge:'',badges:[],profile:{age:'',gender:'',ft:'',in:'',weight:'',goal:'',activity:''},weightLog:[],weekly:{seed:0,progress:0,claimed:false,ptsThisWeek:0,daysThisWeek:[],activitiesThisWeek:0,challengesThisWeek:0,completedWeeks:[],currentWeek:''},friends:[],myCode:'',plan:{name:'',goal:'',targetDate:'',milestones:[],log:[]},timedScores:[],duels:[],crew:{name:'',members:[],wins:0,losses:0},crewBattles:[],theme:'nova'}
 
 function save(){ localStorage.setItem('fxnova', JSON.stringify(s)) }
 function load(){
@@ -1191,6 +1196,7 @@ function loadProfile(){
   document.getElementById('p-goal').value=p.goal||''
   document.getElementById('p-activity').value=p.activity||''
   renderCalc()
+  renderThemePicker()
 }
 function saveProfile(){
   s.profile={age:document.getElementById('p-age').value,gender:document.getElementById('p-gender').value,ft:document.getElementById('p-ft').value,in:document.getElementById('p-in').value,weight:document.getElementById('p-weight').value,goal:document.getElementById('p-goal').value,activity:document.getElementById('p-activity').value}
@@ -1402,6 +1408,61 @@ function updateUI(){
   bw.innerHTML=s.badges.length?s.badges.map(b=>`<span class="badge-chip">${BADGE_DEFS[b]||'🏅'} ${b}</span>`).join(''):'<span class="msg" style="padding:0">No badges yet — start logging!</span>'
 }
 
+// ══════════════════════════════════════════════════════
+// THEMES
+// ══════════════════════════════════════════════════════
+const THEMES = {
+  nova:    { name:'NOVA',    preview:'linear-gradient(135deg,#a855f7,#ec4899)',  vars:{'--nova':'#a855f7','--nova2':'#7c3aed','--bg':'#06001a','--text':'#e2d9f3','--muted':'rgba(226,217,243,0.4)','--card':'rgba(168,85,247,0.06)','--card-border':'rgba(168,85,247,0.2)'},    r:'168,85,247',  r2:'124,58,237', p:'236,72,153', bg:'6,0,26'    },
+  cyber:   { name:'CYBER',   preview:'linear-gradient(135deg,#06b6d4,#7c3aed)',  vars:{'--nova':'#06b6d4','--nova2':'#0891b2','--bg':'#00101a','--text':'#d9f0f3','--muted':'rgba(217,240,243,0.4)','--card':'rgba(6,182,212,0.06)','--card-border':'rgba(6,182,212,0.2)'},    r:'6,182,212',   r2:'8,145,178',  p:'124,58,237', bg:'0,16,26'   },
+  solar:   { name:'SOLAR',   preview:'linear-gradient(135deg,#f59e0b,#ef4444)',  vars:{'--nova':'#f59e0b','--nova2':'#d97706','--bg':'#180a00','--text':'#f3e8d9','--muted':'rgba(243,232,217,0.4)','--card':'rgba(245,158,11,0.06)','--card-border':'rgba(245,158,11,0.2)'},   r:'245,158,11',  r2:'217,119,6',  p:'239,68,68',  bg:'24,10,0'   },
+  phantom: { name:'PHANTOM', preview:'linear-gradient(135deg,#10b981,#a855f7)',  vars:{'--nova':'#10b981','--nova2':'#059669','--bg':'#00100a','--text':'#d9f3e8','--muted':'rgba(217,243,232,0.4)','--card':'rgba(16,185,129,0.06)','--card-border':'rgba(16,185,129,0.2)'},   r:'16,185,129',  r2:'5,150,105',  p:'168,85,247', bg:'0,16,10'   },
+  crimson: { name:'CRIMSON', preview:'linear-gradient(135deg,#ef4444,#f59e0b)',  vars:{'--nova':'#ef4444','--nova2':'#dc2626','--bg':'#1a0000','--text':'#f3d9d9','--muted':'rgba(243,217,217,0.4)','--card':'rgba(239,68,68,0.06)','--card-border':'rgba(239,68,68,0.2)'},     r:'239,68,68',   r2:'220,38,38',  p:'245,158,11', bg:'26,0,0'    },
+}
+function buildThemeCSS(t){
+  const {r,r2,p,bg}=t
+  return `body::before{background:radial-gradient(ellipse 80% 50% at 20% 20%,rgba(${r},0.18) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(${r2},0.14) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 60% 10%,rgba(${p},0.1) 0%,transparent 50%)!important}
+.glass{background:linear-gradient(135deg,rgba(${r},0.12),rgba(${r2},0.06))!important;box-shadow:0 8px 32px rgba(${r},0.12),inset 0 1px 0 rgba(255,255,255,0.06)!important}
+.nova-logo{filter:drop-shadow(0 0 30px rgba(${r},0.6))!important}
+.inp{background:rgba(${r},0.08)!important;border-color:rgba(${r},0.3)!important}
+.inp:focus{border-color:var(--nova)!important;box-shadow:0 0 0 3px rgba(${r},0.15)!important}
+.sel{background:rgba(${r},0.08)!important;border-color:rgba(${r},0.3)!important}
+.sel option{background:rgb(${bg})!important}
+.btn{box-shadow:0 4px 20px rgba(${r},0.4)!important}
+.btn:hover{box-shadow:0 8px 30px rgba(${r},0.55)!important}
+.btn-ghost{background:rgba(${r},0.12)!important;border-color:rgba(${r},0.35)!important}
+.btn-ghost:hover{background:rgba(${r},0.22)!important}
+.topbar{background:rgba(${bg},0.85)!important}
+.bnav{background:rgba(${bg},0.96)!important}
+.rank-pill{background:rgba(${r},0.15)!important;border-color:rgba(${r},0.4)!important}
+.prog-track{background:rgba(${r},0.1)!important}
+.prog-fill{box-shadow:0 0 10px rgba(${r},0.6)!important}
+.lb-tab.on,.battle-tab.on,.plan-tab.on{box-shadow:0 4px 15px rgba(${r},0.3)!important}
+.lb-row{border-color:rgba(${r},0.08)!important}
+.lb-row.you{background:rgba(${r},0.1)!important}
+#anim-overlay{background:rgba(${bg},0.92)!important}
+.anim-ring{box-shadow:0 0 40px rgba(${r},0.4)!important}
+.ex-chip.sel{border-color:var(--nova)!important;background:rgba(${r},0.15)!important;box-shadow:0 0 12px rgba(${r},0.2)!important}
+.duel-card{border-color:rgba(${r},0.3)!important}
+.combo-ex-inp{background:rgba(${r},0.08)!important;border-color:rgba(${r},0.3)!important}
+#toast{background:linear-gradient(135deg,rgba(${r},0.92),rgba(${r2},0.92))!important;border-color:rgba(${r},0.4)!important}`
+}
+let currentTheme='nova'
+function applyTheme(name){
+  const t=THEMES[name];if(!t)return
+  currentTheme=name
+  const root=document.documentElement.style
+  Object.entries(t.vars).forEach(([k,v])=>root.setProperty(k,v))
+  document.getElementById('theme-style').textContent=buildThemeCSS(t)
+  localStorage.setItem('fxTheme',name)
+  s.theme=name;save()
+  renderThemePicker()
+  toast('Theme: '+t.name)
+}
+function renderThemePicker(){
+  const wrap=document.getElementById('theme-picker');if(!wrap)return
+  wrap.innerHTML=Object.entries(THEMES).map(([key,t])=>`<div onclick="applyTheme('${key}')" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;min-width:56px"><div style="width:46px;height:46px;border-radius:12px;background:${t.preview};border:2px solid ${currentTheme===key?'white':'transparent'};box-shadow:${currentTheme===key?'0 0 14px rgba(255,255,255,0.25)':'none'};transition:all 0.2s"></div><div style="font-size:8px;letter-spacing:2px;color:${currentTheme===key?'var(--text)':'var(--muted)'}">${t.name}</div></div>`).join('')
+}
+
 // INIT
 function startApp(){
   const name=document.getElementById('inp-name').value.trim().toUpperCase()
@@ -1410,6 +1471,7 @@ function startApp(){
 }
 
 load();checkWeek()
+const _t=localStorage.getItem('fxTheme')||s.theme||'nova';if(_t!=='nova')applyTheme(_t)
 if(s.name){ checkDay();navTo('app');updateUI() } else { genDaily() }
 </script>
 </body>
